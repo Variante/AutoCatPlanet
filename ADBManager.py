@@ -19,10 +19,11 @@ class ADBManager:
         self.shell_pipe = wexpect.spawn(self.adb + ' shell')
         
         self.key_status = {'1': 0}
+        self.key_pos = {'1': None}
         # print(self.key_status)
         # 后台shell
-        #self.shell_queue = queue.Queue()
-        self.cmd_list = []
+        self.shell_queue = queue.Queue()
+        # self.cmd_list = []
         # 任务管理
         self.new_cmd = threading.Event()
         self.shell_thre = threading.Thread(target=self._adb_send_loop)
@@ -39,26 +40,24 @@ class ADBManager:
 
     def release_all_keys(self):
         for i in self.key_status:
-            self.send_release_event(i)
+            self.send_release_event(code=i)
     
     def _adb_send_loop(self):
         while True:
             self.new_cmd.wait()
             # check
-            count = len(self.cmd_list)
-            if count:
-                cmd = '\n'.join(self.cmd_list)
-                self.shell_pipe.sendline(cmd)
-                if 'exit' in self.cmd_list:
-                    break
-                self.cmd_list = []
-                self.new_cmd.clear()
+            cmds = []
+            while not self.shell_queue.empty():
+                cmds.append(self.shell_queue.get())
+            self.new_cmd.clear()    
+            self.shell_pipe.sendline('\n'.join(cmds))
+            if 'exit' in cmds:
+                break
+            
         # print('loop_done')
     
     def _adb_send_cmd(self, cmd):
-        # print(cmd)
-        # self.shell_queue.put(cmd)
-        self.cmd_list.append(' '.join(cmd))
+        self.shell_queue.put(' '.join(cmd))
         self.new_cmd.set()
         
         # print(self.shell_pipe.readline())
@@ -90,6 +89,7 @@ class ADBManager:
             # step 2.5 if there is xy
             if xy:
                 self._send_position_event(xy[0], xy[1])
+                self.key_pos[code] = xy
             # step3 up/down
             self._send_update_updown(is_up)
             # step4 sync

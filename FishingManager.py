@@ -65,7 +65,7 @@ class FishingManager:
         self.display[value_to_idx(value):, -1] = 128 + (-30 if press else 30)
         self.display[value_to_idx(self.config['pull_release']), -1] = 200
             
-            
+        
         # print(value)
         # print(rotated.shape)
         # cv2.imshow('Pull', np.vstack([rotated, thre]))
@@ -82,10 +82,13 @@ class FishingManager:
         
         band = np.zeros(crop_img.shape, dtype=np.uint8)
         circle = np.zeros(crop_img.shape, dtype=np.uint8)
-        band[(crop_img > 160) & (crop_img < 180)] = 1
+        band[(crop_img > 172) & (crop_img < 180)] = 1
         circle[crop_img > 180] = 1
         tap = False
         circle_idx = 0
+        
+        start_idx = 120
+        end_idx = 180
         
         def find_center(patch):
             s = np.sum(patch)
@@ -102,10 +105,10 @@ class FishingManager:
                 return 0, 1
             return int(np.mean(np.argmax(patch, axis=1))) + start_idx, int(patch.shape[1] - 1 - np.mean(np.argmax(patch[:, ::-1], axis=1))) + start_idx
         
+        enable = True
         if (self.band_idx[1] - self.band_idx[0]) > 20 or (self.band_idx[1] - self.band_idx[0]) < 10 :
-            start_idx = 120
-            end_idx = 280
             self.band_idx = find_range(band, start_idx, end_idx) 
+            enable = False
             # print("检测环带:", self.band_idx)
             
         if self.band_idx[0] > 0:
@@ -115,7 +118,7 @@ class FishingManager:
                 # direction
                 forward = circle_idx > self.last_circle_idx
                 predict = circle_idx + self.config['circle_predict'] * (1 if forward else -1)
-                tap = self.band_idx[0] < predict < self.band_idx[1]
+                tap = (self.band_idx[0] < predict < self.band_idx[1]) and enable
                 # print("Predict: ", predict, circle_idx, 'L', self.band_idx[0], self.band_idx[1])
             if circle_idx > 0:
                 self.last_circle_idx = circle_idx
@@ -135,7 +138,10 @@ class FishingManager:
         self.display[circle_idx, -w - 1] = 225
         self.display[self.band_idx[0], -w-1] = 128
         self.display[self.band_idx[1], -w-1] = 200
+        
         self.display[:, -w:] = np.rot90(crop_img, 3)
+        self.display[start_idx, -w:] = 225
+        self.display[end_idx, -w:] = 225
         if tap:
             self.display[:, -w] += 30
             # self.chart = np.hstack([self.chart[:, w:], rot_img])

@@ -208,15 +208,17 @@ def main(cfg):
                 img_time = time.perf_counter()
                 pil_img = Image.fromarray(img[...,::-1])
                 
-                action = {"release": None}
                 # detect game state
                 gm.check_img(img, img_time)
                 if last_mode != gm.mode:
                     f.clear()
+                    adb.release_all_keys()
                 last_mode = gm.mode
                 # check with Fishing manager
                 if last_mode in f.mode:
                     action = f.mode[gm.mode](img, img_time)
+                else:
+                    action = {}
                     
                 adb.parse_action(action)
                 

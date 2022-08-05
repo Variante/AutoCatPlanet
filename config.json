@@ -9,11 +9,11 @@
 	"adb_device": "/dev/input/event8",
     "adb_init_cmd": "connect 127.0.0.1:7555",
     "display_fps": 60,
-    "check_fps": 10,
+    "check_fps": 2,
     "repeat": 0,
 	"fishing": {
 		"circle_predict": 50,
-		"pull_release": 15
+		"pull_release": 30
 	},
 	"data": [
         {
