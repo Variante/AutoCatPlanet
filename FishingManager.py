@@ -62,7 +62,7 @@ class FishingManager:
         
         self.display[:, :-1] = self.display[:, 1:] 
         self.display[:, -1] = 0
-        self.display[value_to_idx(value):, -1] = 128 + 30 if press else -30
+        self.display[value_to_idx(value):, -1] = 128 + (-30 if press else 30)
         self.display[value_to_idx(self.config['pull_release']), -1] = 200
             
             

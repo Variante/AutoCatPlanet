@@ -14,6 +14,9 @@ pip install mss pillow numpy opencv-python pywin32 wexpect
 S:保存图片
 ```
 
+## 已知问题
+在和🐟拉扯的时候有概率丢失按键，原因不详。
+
 ## 声明
 本工具仅供娱乐，如果您因为使用本软件造成损失，那可真是太遗憾了。
 要用魔法对抗魔法，用机械降神对抗坐牢。
