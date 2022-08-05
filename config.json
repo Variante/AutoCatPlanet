@@ -33,7 +33,7 @@
 		{
             "file": "fishingsell.png",
             "area": [0.462, 0.644, 0.5, 0.692],
-            "thre": 0.8,
+            "thre": 0.67,
             "comment": "卖钱结算",
 			"mode": 3
         }

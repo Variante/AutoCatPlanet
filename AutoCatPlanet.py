@@ -255,7 +255,7 @@ def main(cfg):
     adb.stop_loop()
 
 def usage():
-    print("AutoCatPlanet操作说明:\nS:保存当前截图\n需要手动开始、手动结算。" + '-'*8)
+    print("AutoCatPlanet操作说明:\nS:保存当前截图\n需要手动开始、手动结算。\n" + '-'*8)
 
 
 if __name__ == '__main__':
