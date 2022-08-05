@@ -1,6 +1,7 @@
 from util import *
 import numpy as np
 import cv2
+import random
 
 # 钓鱼用
 class FishingManager:
@@ -27,9 +28,14 @@ class FishingManager:
         self.tapped = False
         
     def just_tap(self, img, img_time):
-        return {
-            "tap": None
-        }
+        if not self.tapped:
+            res = {
+                "tap": (random.random() / 2 + 0.25, random.random() / 3 + 0.5)
+            }
+        else:
+            res = {}
+        return res
+        
         
     def check_pull(self, img, img_time):
         # 和🐟的拉扯
@@ -37,7 +43,7 @@ class FishingManager:
         h, w, _ = img.shape
         crop_img = cv2.resize(img[int(h * 0.2): int(h * 0.35), int(w * 0.68): int(w * 0.8), 0], (150, 100))
         M = cv2.getRotationMatrix2D((10, 50), 25, 1.0)
-        rotated = cv2.warpAffine(crop_img, M, (80, 30))
+        rotated = cv2.warpAffine(crop_img, M, (80, 30))[5:, 10:]
         thre = rotated.copy()
         thre[rotated < 200] = 0
         
@@ -48,6 +54,18 @@ class FishingManager:
         press = True
         if value > self.config['pull_release']:
             press = False
+       
+       
+        def value_to_idx(val):
+            ratio = 1 - min((val / self.config['pull_release']) / 4, 1)
+            return int(ratio * (self.display.shape[0] - 1))
+        
+        self.display[:, :-1] = self.display[:, 1:] 
+        self.display[:, -1] = 0
+        self.display[value_to_idx(value):, -1] = 128 + 30 if press else -30
+        self.display[value_to_idx(self.config['pull_release']), -1] = 200
+            
+            
         # print(value)
         # print(rotated.shape)
         # cv2.imshow('Pull', np.vstack([rotated, thre]))
@@ -114,13 +132,12 @@ class FishingManager:
         w = rot_img.shape[1]
         self.display[:, -w] = 0
         self.display[:, :-1] = self.display[:, 1:]
-        self.display[circle_idx, -w] = 225
-        self.display[self.band_idx[0], -w] = 128
-        self.display[self.band_idx[1], -w] = 200
+        self.display[circle_idx, -w - 1] = 225
+        self.display[self.band_idx[0], -w-1] = 128
+        self.display[self.band_idx[1], -w-1] = 200
         self.display[:, -w:] = np.rot90(crop_img, 3)
         if tap:
             self.display[:, -w] += 30
-            self.display[:, :-w] = self.display[:, w:]
             # self.chart = np.hstack([self.chart[:, w:], rot_img])
         # self.display = np.hstack([self.chart, rot_img])
         # cv2.imshow('Circle', np.hstack([self.chart, np.rot90(crop_img, 3)]))

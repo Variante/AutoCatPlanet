@@ -9,11 +9,11 @@
 	"adb_device": "/dev/input/event8",
     "adb_init_cmd": "connect 127.0.0.1:7555",
     "display_fps": 60,
-    "check_fps": 15,
+    "check_fps": 10,
     "repeat": 0,
 	"fishing": {
 		"circle_predict": 50,
-		"pull_release": 20
+		"pull_release": 15
 	},
 	"data": [
         {
@@ -26,7 +26,7 @@
 		{
             "file": "fishingpull.png",
             "area": [0.877, 0.811, 0.936, 0.904],
-            "thre": 0.30,
+            "thre": 0.35,
             "comment": "拉鱼",
 			"mode": 2
         },

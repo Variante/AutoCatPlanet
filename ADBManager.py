@@ -42,9 +42,8 @@ class ADBManager:
             self.send_release_event(i)
     
     def _adb_send_loop(self):
-        c = 0
         while True:
-            self.new_cmd.wait(timeout=1)
+            self.new_cmd.wait()
             # check
             count = len(self.cmd_list)
             if count:

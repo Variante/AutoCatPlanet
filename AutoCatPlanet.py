@@ -208,16 +208,15 @@ def main(cfg):
                 img_time = time.perf_counter()
                 pil_img = Image.fromarray(img[...,::-1])
                 
-                action = {}
+                action = {"release": None}
                 # detect game state
                 gm.check_img(img, img_time)
                 if last_mode != gm.mode:
                     f.clear()
                 last_mode = gm.mode
                 # check with Fishing manager
-                if gm.mode in f.mode:
+                if last_mode in f.mode:
                     action = f.mode[gm.mode](img, img_time)
-                    # pil_img = Image.fromarray(f.display)
                     
                 adb.parse_action(action)
                 
@@ -237,12 +236,15 @@ def main(cfg):
                     pil_img.save(date_time + ".png")
                     save_img = False
                 
-                if gm.mode == 0 and scale > 0:
-                    pil_img = pil_img.resize((int(pil_img.size[0] * scale), int(pil_img.size[1] * scale)))
+                """
+                if last_mode == 0:
+                    if scale > 0:
+                        pil_img = pil_img.resize((int(pil_img.size[0] * scale), int(pil_img.size[1] * scale)))
                 else:
-                    pil_img = Image.fromarray(f.display)
+                """
+                pil_img = Image.fromarray(f.display)
                 
-                
+                # print(gm.mode)
                 # update the display
                 imgtk = ImageTk.PhotoImage(image=pil_img)
                 lmain.imgtk = imgtk
