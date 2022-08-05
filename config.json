@@ -1,0 +1,43 @@
+{
+    "name": "MuMu模拟器",
+    "comment": "修改adb_shape为实际的模拟器大小，adb_init_cmd为相应模拟器的连接命令，name是窗口名称，如果没有准确匹配的名称会搜索包含的name的窗口。padding是计算比例之前扣除的像素数量，形式top,bottom,left,right。stick是自动贴合主窗口，设置为空队列即不贴合。",
+    "padding": [36, 53, 0, 0],
+    "scale": 0.4,
+	"match_width": 360,
+    "stick": ["left", "top,height"],
+    "adb_shape": [2560, 1440],
+	"adb_device": "/dev/input/event8",
+    "adb_init_cmd": "connect 127.0.0.1:7555",
+    "display_fps": 60,
+    "check_fps": 15,
+    "repeat": 0,
+	"fishing": {
+		"circle_predict": 50,
+		"pull_release": 20
+	},
+	"data": [
+        {
+            "file": "fishingcircle.png",
+            "area": [0.427, 0.1, 0.548, 0.15],
+            "thre": 0.40,
+            "comment": "钓鱼环",
+			"mode": 1
+        },
+		{
+            "file": "fishingpull.png",
+            "area": [0.877, 0.811, 0.936, 0.904],
+            "thre": 0.30,
+            "comment": "拉鱼",
+			"mode": 2
+        },
+		{
+            "file": "fishingsell.png",
+            "area": [0.462, 0.644, 0.5, 0.692],
+            "thre": 0.8,
+            "comment": "卖钱结算",
+			"mode": 3
+        }
+	]
+	
+}
+

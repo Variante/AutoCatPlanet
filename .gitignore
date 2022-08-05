@@ -1,0 +1,8 @@
+*.pyc
+dist/*
+build/*
+wexpect/*
+*.spec
+*.zip
+*.exe
+*.bak
