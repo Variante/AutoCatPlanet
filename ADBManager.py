@@ -18,8 +18,7 @@ class ADBManager:
         # 链接shell
         self.shell_pipe = wexpect.spawn(self.adb + ' shell')
         
-        self.key_status = {'1': 0}
-        self.key_pos = {'1': None}
+        self.key_status = {'1': 0, '10': 0}
         # print(self.key_status)
         # 后台shell
         self.shell_queue = queue.Queue()
@@ -89,7 +88,6 @@ class ADBManager:
             # step 2.5 if there is xy
             if xy:
                 self._send_position_event(xy[0], xy[1])
-                self.key_pos[code] = xy
             # step3 up/down
             self._send_update_updown(is_up)
             # step4 sync
@@ -123,7 +121,7 @@ class ADBManager:
         # use adb shell getevent -l to monitor events!
         
     def parse_action(self, action):
-    
+        code = '10' # 增加了一个虚拟按钮
         def cvt_corr(xy):
             if not isinstance(xy, tuple):
                 return None
@@ -133,13 +131,13 @@ class ADBManager:
             return (int(x * self.config["adb_shape"][0]), int(y * self.config["adb_shape"][1]))
 
         if 'tap' in action:
-            self.send_tap_event(cvt_corr(action['tap']))
+            self.send_tap_event(cvt_corr(action['tap']), code="1")
             
         elif 'release' in action:
-            self.send_release_event(cvt_corr(action['release']))
+            self.send_release_event(cvt_corr(action['release']), code=code)
             
         elif 'press' in action:
-            self.send_press_event(cvt_corr(action['press']))
+            self.send_press_event(cvt_corr(action['press']), code=code)
         
        
 if __name__ == '__main__':

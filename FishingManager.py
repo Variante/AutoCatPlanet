@@ -70,7 +70,8 @@ class FishingManager:
         # print(rotated.shape)
         # cv2.imshow('Pull', np.vstack([rotated, thre]))
         # cv2.waitKey(0)
-        return { "press" if press else "release": (0.9, 0.85) }
+        # return { "press" if press else "release": (0.9, 0.85) } # 如果不使用虚拟按键
+        return { "press" if press else "release": None }
 
     def check_circle(self, img, img_time):
         # 抛竿时机的把握
