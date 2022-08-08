@@ -8,8 +8,8 @@
     "adb_shape": [2560, 1440],
 	"adb_device": "/dev/input/event8",
     "adb_init_cmd": "connect 127.0.0.1:7555",
-    "display_fps": 60,
-    "check_fps": 2,
+    "display_fps": 30,
+    "check_fps": 5,
     "repeat": 0,
 	"fishing": {
 		"circle_predict": 50,
@@ -19,21 +19,21 @@
         {
             "file": "fishingcircle.png",
             "area": [0.427, 0.1, 0.548, 0.15],
-            "thre": 0.40,
+            "thre": 0.5,
             "comment": "钓鱼环",
 			"mode": 1
         },
 		{
             "file": "fishingpull.png",
-            "area": [0.877, 0.811, 0.936, 0.904],
-            "thre": 0.35,
+            "area": [0.88, 0.811, 0.937, 0.89],
+            "thre": 0.3,
             "comment": "拉鱼",
 			"mode": 2
         },
 		{
             "file": "fishingsell.png",
             "area": [0.462, 0.644, 0.5, 0.692],
-            "thre": 0.67,
+            "thre": 0.6,
             "comment": "卖钱结算",
 			"mode": 3
         }

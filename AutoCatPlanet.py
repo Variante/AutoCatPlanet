@@ -112,7 +112,7 @@ class GameManager:
         self.img_dict = {}
         for item in self.cfg['data']:
             name = item['file']
-            img = cv2.imread('./img/' + name, 0)
+            img = cv2.imread('./img/' + name)[:, :, 2]
             w = self.cfg['match_width']
             h = int(w * img.shape[0] / img.shape[1])
             img = cv2.resize(img, (w, h))
@@ -153,7 +153,7 @@ def main(cfg):
     ldres = Message(app, width=800, font=tkFont.Font(size=15, weight=tkFont.NORMAL))
     ldres.pack()
     
-    root.title('AutoArk')
+    root.title('AutoCatPlanet')
     # root.geometry('1300x760')
     target_name = cfg['name']
    
@@ -244,7 +244,8 @@ def main(cfg):
                         pil_img = pil_img.resize((int(pil_img.size[0] * scale), int(pil_img.size[1] * scale)))
                 else:
                 """
-                pil_img = Image.fromarray(f.display)
+                
+                pil_img = Image.fromarray(np.hstack([cv2.resize(img, (534, 300)), f.display])[...,::-1])
                 
                 # print(gm.mode)
                 # update the display

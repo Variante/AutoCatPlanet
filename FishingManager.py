@@ -2,13 +2,14 @@ from util import *
 import numpy as np
 import cv2
 import random
+import scipy.stats
 
 # 钓鱼用
 class FishingManager:
 
     def __init__(self, config):
         # self.chart = None
-        self.display = np.zeros([300, 400], dtype=np.uint8)
+        self.display = np.zeros([300, 300, 3], dtype=np.uint8)
         self.config = config["fishing"]
         self.last_circle_idx = 0
         self.last_time = 0
@@ -41,14 +42,14 @@ class FishingManager:
         # 和🐟的拉扯
         self.last_time = img_time
         h, w, _ = img.shape
-        crop_img = cv2.resize(img[int(h * 0.2): int(h * 0.35), int(w * 0.68): int(w * 0.8), 0], (150, 100))
+        crop_img = cv2.resize(img[int(h * 0.2): int(h * 0.35), int(w * 0.68): int(w * 0.8)], (150, 100))
         M = cv2.getRotationMatrix2D((10, 50), 25, 1.0)
-        rotated = cv2.warpAffine(crop_img, M, (80, 30))[5:, 10:]
+        rotated = cv2.warpAffine(crop_img[..., 0], M, (80, 30))[5:, 10:]
         thre = rotated.copy()
         thre[rotated < 200] = 0
         
         value = np.mean(thre)
-        self.display[:thre.shape[0], :thre.shape[1]] = thre.copy()
+        self.display[:thre.shape[0], :thre.shape[1]] = np.transpose(np.tile(thre, (3, 1, 1)), (1, 2, 0))
             # self.display = cv2.putText(self.display, f'M:{value:.1f}', (50, 50), self.font, 1, 255, 2)
         
         press = True
@@ -78,12 +79,13 @@ class FishingManager:
         if self.tapped:
             return {}
         h, w, _ = img.shape
-        crop_img = cv2.resize(img[int(h * 0.495): int(h * 0.505), int(w * 0.5): int(w * 0.7), 0], (300, 10))
+        crop_img = cv2.resize(img[int(h * 0.495): int(h * 0.505), int(w * 0.5): int(w * 0.7)], (300, 10))
         rot_img = np.rot90(crop_img, 3)
         
+        crop_img = crop_img[..., 0]
         band = np.zeros(crop_img.shape, dtype=np.uint8)
         circle = np.zeros(crop_img.shape, dtype=np.uint8)
-        band[(crop_img > 172) & (crop_img < 180)] = 1
+        band[(crop_img > 165) & (crop_img < 180)] = 1
         circle[crop_img > 180] = 1
         tap = False
         circle_idx = 0
@@ -104,7 +106,8 @@ class FishingManager:
             if np.max(patch) == 0:
                 # print("检测不到环带")
                 return 0, 1
-            return int(np.mean(np.argmax(patch, axis=1))) + start_idx, int(patch.shape[1] - 1 - np.mean(np.argmax(patch[:, ::-1], axis=1))) + start_idx
+                # results_dist, proportiontocut=0.25, axis=None)
+            return int(scipy.stats.trim_mean(np.argmax(patch, axis=1), proportiontocut=0.25)) + start_idx, int(patch.shape[1] - 1 - scipy.stats.trim_mean(np.argmax(patch[:, ::-1], axis=1), proportiontocut=0.25)) + start_idx
         
         enable = True
         if (self.band_idx[1] - self.band_idx[0]) > 20 or (self.band_idx[1] - self.band_idx[0]) < 10 :
@@ -140,7 +143,7 @@ class FishingManager:
         self.display[self.band_idx[0], -w-1] = 128
         self.display[self.band_idx[1], -w-1] = 200
         
-        self.display[:, -w:] = np.rot90(crop_img, 3)
+        self.display[:, -w:] = rot_img
         self.display[start_idx, -w:] = 225
         self.display[end_idx, -w:] = 225
         if tap:
