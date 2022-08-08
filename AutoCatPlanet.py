@@ -42,10 +42,6 @@ class GameManager:
     def check_loop(self):
         time.sleep(1)
         
-        def get_patch(img, area):
-            h, w = img.shape[:2]
-            return img[int(h * area[1]): int(h * area[3]), int(w * area[0]): int(w * area[2])]
-        
         while self.run:
             # fishing:
             # res = fm.check_circle(img)
@@ -55,29 +51,29 @@ class GameManager:
                 continue
                 
             if self.src_img is not None:
-                src = self.src_img[...,2]
                 text_list = []
                 self.mode = 0
                 for item in self.cfg['data']:
+                    chn = item['chn']
+                    src = self.src_img[...,chn]
                     name = item['file']
-                    tgt = self.img_dict[name]
+                    comment = item['comment']
+                    tgt = self.img_dict[comment]
                     thre = item['thre']
                     area = item['area']
-                    if 'comment' in item:
-                        name = item['comment']
                     
+                        
+                    # print(src.shape, area)
+                    src_c = get_patch(src, area)
+                    # print(src.shape, tgt.shape)
+                    tgt_c = cv2.resize(tgt, (src_c.shape[1], src_c.shape[0]))
                     
-                    tgt = get_patch(tgt, area)
-                    src_c = cv2.resize(get_patch(src, area), (tgt.shape[1], tgt.shape[0]))
-                    
-                    # print(tgt.shape, src_c.shape)
-
-                    res = cv2.matchTemplate(src_c, tgt, cv2.TM_CCOEFF_NORMED)
+                    # cv2.imshow(comment, np.hstack([src_c, tgt_c]))
+                    # cv2.waitKey(1)
+                    res = cv2.matchTemplate(src_c, tgt_c, cv2.TM_CCOEFF_NORMED)
                     val = np.max(res)
                     
-                    
-                    # print("Check " + name, val, thre)
-                    tmp_text = f"{name}: {val:.2f}({thre:.2f})"
+                    tmp_text = f"{comment}: {val:.2f}({thre:.2f})"
                     
                     if 'count' in item:
                         tmp_text += f"[{item['count']}]"
@@ -89,12 +85,8 @@ class GameManager:
                         repeat_dif = 0
 
                     if val > thre:
-                        # cv2.imshow(name, src_c)
-                        # cv2.waitKey(10)
-                        # print(name, "checked")
                         tmp_text += " √"
-                        self.mode = item['mode']
-                        
+                        self.mode = item['mode']            
                     text_list.append(tmp_text)
                     
                 self.text = '\n'.join(text_list)
@@ -111,12 +103,15 @@ class GameManager:
         self.img_dict = {}
         for item in self.cfg['data']:
             name = item['file']
-            img = cv2.imread('./img/' + name)[:, :, 2]
+            comment = item['comment']
+            chn = item['chn']
+            img = cv2.imread('./img/' + name)[:, :, chn]
             w = self.cfg['match_width']
             h = int(w * img.shape[0] / img.shape[1])
             img = cv2.resize(img, (w, h))
             # print(img.shape)
-            self.img_dict[name] = img
+            area = item['area']
+            self.img_dict[comment] = get_patch(img, area)
             
     def check_img(self, src, src_time):
         self.src_img = src
