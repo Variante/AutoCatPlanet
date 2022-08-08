@@ -10,7 +10,6 @@ import cv2
 from datetime import datetime
 import threading
 import random
-import wexpect
 import time
 from FishingManager import *
 from ADBManager import *

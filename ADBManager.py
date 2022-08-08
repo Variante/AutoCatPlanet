@@ -1,6 +1,6 @@
 # coding=utf-8
 
-import wexpect
+from adb_shell.adb_device import AdbDeviceTcp
 import threading
 import queue
 import time
@@ -11,12 +11,10 @@ from util import *
 class ADBManager:
     def __init__(self, config):
         self.config = config
-        self.adb = './adb/adb.exe'
         self.device = config['adb_device']
-        pipe = wexpect.spawn(self.adb + ' ' + config['adb_init_cmd'])
-        pipe.expect(['connected', wexpect.EOF])
         # 链接shell
-        self.shell_pipe = wexpect.spawn(self.adb + ' shell')
+        self.shell_pipe = AdbDeviceTcp(config['adb_ip'], config['adb_port'], default_transport_timeout_s=9.)
+        self.shell_pipe.connect()
         
         self.key_status = {'1': 0, '10': 0}
         # print(self.key_status)
@@ -49,7 +47,7 @@ class ADBManager:
             while not self.shell_queue.empty():
                 cmds.append(self.shell_queue.get())
             self.new_cmd.clear()    
-            self.shell_pipe.sendline('\n'.join(cmds))
+            self.shell_pipe.shell('\n'.join(cmds))
             if 'exit' in cmds:
                 break
             

@@ -5,7 +5,7 @@
 
 ## 安装
 ```
-pip install mss pillow numpy opencv-python pywin32 wexpect
+pip install mss pillow numpy opencv-python pywin32 adb-shell
 ```
 
 ## 使用方法
