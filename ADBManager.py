@@ -119,7 +119,8 @@ class ADBManager:
         # use adb shell getevent -l to monitor events!
         
     def parse_action(self, action):
-        code = '10' # 增加了一个虚拟按钮
+        # code = '10' # 增加了一个虚拟按钮
+        code = '1'
         def cvt_corr(xy):
             if not isinstance(xy, tuple):
                 return None

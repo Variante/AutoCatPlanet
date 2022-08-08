@@ -15,10 +15,12 @@ class FishingManager:
         self.last_time = 0
         self.band_idx = (0, 0)
         self.tapped = False
+        self.counter = 0
         self.mode = {
             1: self.check_circle,
             2: self.check_pull,
             3: self.just_tap,
+            4: self.start_tap,
         }
         # self.font = cv2.FONT_HERSHEY_SIMPLEX
         
@@ -27,14 +29,31 @@ class FishingManager:
         self.band_idx = (0, 0)
         self.last_time = 0
         self.tapped = False
+        self.counter = 0
+        
+        
+    def start_tap(self, img, img_time):
+        self.counter += 1
+        if not self.tapped or self.counter > 30:
+            res = {
+                "tap": (random.random() / 10 + 0.88, random.random() / 10 + 0.8)
+            }
+            self.counter = 0
+        else:
+            res = {}
+        self.tapped = True
+        return res
         
     def just_tap(self, img, img_time):
-        if not self.tapped:
+        self.counter += 1
+        if not self.tapped or self.counter > 30:
             res = {
                 "tap": (random.random() / 2 + 0.25, random.random() / 3 + 0.5)
             }
+            self.counter = 0
         else:
             res = {}
+        self.tapped = True
         return res
         
         
@@ -71,8 +90,8 @@ class FishingManager:
         # print(rotated.shape)
         # cv2.imshow('Pull', np.vstack([rotated, thre]))
         # cv2.waitKey(0)
-        # return { "press" if press else "release": (0.9, 0.85) } # 如果不使用虚拟按键
-        return { "press" if press else "release": None }
+        return { "press" if press else "release": (0.9, 0.85) } # 如果不使用虚拟按键
+        # return { "press" if press else "release": None }
 
     def check_circle(self, img, img_time):
         # 抛竿时机的把握

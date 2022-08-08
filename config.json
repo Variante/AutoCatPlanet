@@ -17,12 +17,20 @@
 		"pull_release": 30
 	},
 	"data": [
+		{
+            "file": "fishingstart.png",
+            "area": [0.88, 0.811, 0.937, 0.89],
+			"chn": 2,
+            "thre": 0.6,
+            "comment": "钓鱼开始",
+			"mode": 4
+        },
         {
             "file": "fishingcircle.png",
             "area": [0.427, 0.1, 0.548, 0.15],
 			"chn": 2,
             "thre": 0.6,
-            "comment": "钓鱼环",
+            "comment": "抛竿",
 			"mode": 1
         },
 		{
@@ -35,7 +43,7 @@
         },
 		{
             "file": "fishingsummary.png",
-            "area": [0.473, 0.395, 0.547, 0.604],
+            "area": [0.451, 0.889, 0.547, 0.934],
 			"chn": 0,
             "thre": 0.6,
             "comment": "鱼结算",
@@ -45,7 +53,7 @@
             "file": "fishingsell.png",
             "area": [0.462, 0.644, 0.5, 0.692],
 			"chn": 1,
-            "thre": 0.6,
+            "thre": 0.45,
             "comment": "卖钱结算",
 			"mode": 3
         }
