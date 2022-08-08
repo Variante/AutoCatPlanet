@@ -48,6 +48,7 @@ class GameManager:
                 
             if self.pause_game:
                 self.mode = 0
+                self.text = '暂停'
                 continue
                 
             if self.src_img is not None:
@@ -158,6 +159,8 @@ def main(cfg):
     def onKeyPress(event):
         nonlocal save_img
         # print(event)
+        if event.char in ' ':
+            gm.pause_game = not gm.pause_game
         if event.char in 'rR':
             cfg = load_cfg()
             gm.set_config(cfg)
