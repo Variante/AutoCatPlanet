@@ -15,7 +15,7 @@ def load_cfg():
 
 
 def get_possible_window_name(name="MuMu模拟器"):
-    print("Search for the window whose name contains", name)
+    # print("Search for the window whose name contains", name)
     possible_hwnd = None
     def winEnumHandler(hwnd, ctx):
         nonlocal possible_hwnd
@@ -26,7 +26,7 @@ def get_possible_window_name(name="MuMu模拟器"):
     win32gui.EnumWindows(winEnumHandler, None)
     if possible_hwnd is None:
         print("Window not found")
-    print('-' * 8)
+    # print('-' * 8)
     return possible_hwnd
     
     
@@ -44,7 +44,7 @@ def get_window_roi(name, pos, padding):
     # print(handle)
     # handle = 0xd0ea6
     if not handle:
-        print("Can't not find " + name)
+        # print("Can't not find " + name)
         handle = get_possible_window_name()
 
     if handle is None:
