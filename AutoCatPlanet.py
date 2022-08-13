@@ -161,9 +161,6 @@ def main(cfg):
         # print(event)
         if event.char in ' ':
             gm.pause_game = not gm.pause_game
-        if event.char in 'rR':
-            cfg = load_cfg()
-            gm.set_config(cfg)
         if event.char in 'sS':
             save_img = True
 
