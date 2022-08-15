@@ -56,6 +56,22 @@
             "thre": 0.45,
             "comment": "卖钱结算",
 			"mode": 3
+        },
+		{
+            "file": "fishingbottle.png",
+            "area": [0.473, 0.419, 0.537, 0.565],
+			"chn": 1,
+            "thre": 0.6,
+            "comment": "漂流瓶",
+			"mode": 3
+        },
+		{
+            "file": "fishingthrowback.png",
+            "area": [0.445, 0.783, 0.58, 0.854],
+			"chn": 1,
+            "thre": 0.6,
+            "comment": "扔回去",
+			"mode": 3
         }
 	]
 	

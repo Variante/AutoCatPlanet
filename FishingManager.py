@@ -48,7 +48,7 @@ class FishingManager:
         self.counter += 1
         if not self.tapped or self.counter > 30:
             res = {
-                "tap": (random.random() / 2 + 0.25, random.random() / 3 + 0.5)
+                "tap": (random.random() / 10 + 0.445, random.random() / 12 + 0.78)
             }
             self.counter = 0
         else:
