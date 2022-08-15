@@ -21,6 +21,7 @@ class FishingManager:
             2: self.check_pull,
             3: self.just_tap,
             4: self.start_tap,
+            5: self.center_tap,
         }
         # self.font = cv2.FONT_HERSHEY_SIMPLEX
         
@@ -31,31 +32,26 @@ class FishingManager:
         self.tapped = False
         self.counter = 0
         
+    def tap(self, x, y):
+        self.counter += 1
+        if not self.tapped or self.counter > 30:
+            res = {
+                "tap": (x, y)
+            }
+            self.counter = 0
+        else:
+            res = {}
+        self.tapped = True
+        return res
+        
+    def center_tap(self, img, img_time):
+        return self.tap(random.random() / 20 + 0.473, random.random() / 10 + 0.419)
         
     def start_tap(self, img, img_time):
-        self.counter += 1
-        if not self.tapped or self.counter > 30:
-            res = {
-                "tap": (random.random() / 10 + 0.88, random.random() / 10 + 0.8)
-            }
-            self.counter = 0
-        else:
-            res = {}
-        self.tapped = True
-        return res
+        return self.tap(random.random() / 10 + 0.88, random.random() / 10 + 0.8)
         
     def just_tap(self, img, img_time):
-        self.counter += 1
-        if not self.tapped or self.counter > 30:
-            res = {
-                "tap": (random.random() / 10 + 0.445, random.random() / 12 + 0.78)
-            }
-            self.counter = 0
-        else:
-            res = {}
-        self.tapped = True
-        return res
-        
+        return self.tap(random.random() / 10 + 0.445, random.random() / 12 + 0.78)
         
     def check_pull(self, img, img_time):
         # 和🐟的拉扯
