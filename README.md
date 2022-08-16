@@ -8,7 +8,7 @@
 ```
 git clone https://github.com/Variante/AutoCatPlanet
 cd AutoCatPlanet
-pip install mss pillow numpy opencv-python pywin32 adb-shell
+pip install mss pillow scipy numpy opencv-python pywin32 adb-shell
 ```
 
 ## 使用方法
