@@ -49,9 +49,8 @@ class GameManager:
             if self.pause_game:
                 self.mode = 0
                 self.text = '暂停'
-                continue
                 
-            if self.src_img is not None:
+            elif self.src_img is not None:
                 text_list = []
                 self.mode = 0
                 for item in self.cfg['data']:

@@ -13,7 +13,7 @@
     "check_fps": 5,
     "repeat": 0,
 	"fishing": {
-		"circle_predict": 30,
+		"circle_predict": 15,
 		"pull_release": 30
 	},
 	"data": [
