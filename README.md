@@ -27,9 +27,17 @@ pip install mss pillow scipy numpy opencv-python pywin32 adb-shell
 ```
 
 确保修改后json文件依然格式正确，最后打开模拟器后运行AutoCatPlanet.py即可，使用时需保证游戏窗口在前台。
+
+如果不需要本软件窗口紧贴模拟器，请将config中修改stick为空队列。
 ```
-S:保存图片
-空格:暂停及恢复
+ "stick": [],
+```
+
+使用方法：
+```
+S:保存当前截图
+P:估计config中padding的数值,需要手动更改
+空格:暂停/恢复
 ```
 如果你为其它模拟器修改好了配置文件，欢迎pr，感谢。
 

@@ -2,6 +2,8 @@
     "name": "MuMu模拟器",
     "comment": "修改adb_shape为实际的模拟器大小，adb_init_cmd为相应模拟器的连接命令，name是窗口名称，如果没有准确匹配的名称会搜索包含的name的窗口。padding是计算比例之前扣除的像素数量，形式top,bottom,left,right。stick是自动贴合主窗口，设置为空队列即不贴合。",
     "padding": [36, 53, 0, 0],
+	"autopadding": true,
+	"autopadding_thre": 40,
     "scale": 0.4,
 	"match_width": 1280,
     "stick": ["left", "top,height"],

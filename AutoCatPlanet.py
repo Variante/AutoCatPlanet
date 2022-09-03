@@ -154,14 +154,18 @@ def main(cfg):
     scale = cfg['scale']
 
     save_img = False
+    auto_padding = False
     
     def onKeyPress(event):
         nonlocal save_img
+        nonlocal auto_padding
         # print(event)
         if event.char in ' ':
             gm.pause_game = not gm.pause_game
         if event.char in 'sS':
             save_img = True
+        if event.char in 'pP':
+            auto_padding = True and cfg['autopadding']
 
     def get_stick(des, win):
         words = des.split(',')
@@ -181,13 +185,15 @@ def main(cfg):
     gm = GameManager(cfg)
     f = FishingManager(cfg)
     adb = ADBManager(cfg)
-
+    
+    
     with mss.mss() as m:
         def capture_stream():
             nonlocal save_img
             nonlocal last_mode
+            nonlocal auto_padding
 
-            win_info = get_window_roi(target_name, [0, 0, 1, 1], cfg['padding'])
+            win_info = get_window_roi(target_name, [0, 0, 1, 1], [0] * 4 if auto_padding else cfg['padding'])
             if win_info['left'] < 0 and win_info['top'] < 0:
                 ldtag1.configure(text='未检测到窗口')
                 ldtag.configure(text='')
@@ -196,8 +202,35 @@ def main(cfg):
             else:
                 full_win = get_window_roi(target_name,[0, 0, 1, 1], [0, 0, 0, 0])
                 if len(cfg['stick']) == 2:
-                    root.geometry(f"+{get_stick(cfg['stick'][0], full_win)}+{get_stick(cfg['stick'][1], full_win)}")
+                    root.geometry(f"+{get_stick(cfg['stick'][0], full_win)}+{get_stick(cfg['stick'][1], full_win)}") 
                 img = np.array(m.grab(win_info))[...,:3]
+                
+                if auto_padding:
+                    fake_gray = np.mean(img, axis=-1)
+                    padx = np.median(fake_gray, axis=0)
+                    pady = np.median(fake_gray, axis=1)
+                    
+                    def find_padding(src):
+                        i = 0
+                        j = src.shape[0] - 1
+                        thre = cfg['autopadding_thre']
+                        move = True
+                        while i < j and move:
+                            move = False
+                            if src[i] < thre:
+                                i += 1
+                                move = True
+                            if src[j] < thre:
+                                j -= 1
+                                move = True
+                        return [i, src.shape[0] - j - 1]
+                        
+                    padding = find_padding(pady) + find_padding(padx)
+                    print('AutoPadding| size: ', (pady.shape[0], padx.shape[0]), 'padding ', padding)             
+                    cfg['padding'] = padding
+                    img = img[padding[0]: img.shape[0] - padding[1], padding[2] : img.shape[1] - padding[3]]
+                    auto_padding = False
+                    
                 img_time = time.perf_counter()
                 pil_img = Image.fromarray(img[...,::-1])
                 
@@ -253,7 +286,7 @@ def main(cfg):
     adb.stop_loop()
 
 def usage():
-    print("AutoCatPlanet操作说明:\nS:保存当前截图\n需要手动开始、手动结算。\n" + '-'*8)
+    print("AutoCatPlanet操作说明:\nS:保存当前截图\nP:估计config中padding的数值,需要手动更改\n空格:暂停/恢复\n" + '-'*8)
 
 
 if __name__ == '__main__':
