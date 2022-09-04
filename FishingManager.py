@@ -16,6 +16,7 @@ class FishingManager:
         self.band_idx = (0, 0)
         self.tapped = False
         self.counter = 0
+        self.pull_counter = 0
         self.mode = {
             1: self.check_circle,
             2: self.check_pull,
@@ -23,6 +24,10 @@ class FishingManager:
             4: self.start_tap,
             5: self.center_tap,
         }
+        self.drop = False
+        self.drop_count = 0
+        self.fish_count = 0
+        
         # self.font = cv2.FONT_HERSHEY_SIMPLEX
         
     def clear(self):
@@ -30,7 +35,9 @@ class FishingManager:
         self.band_idx = (0, 0)
         self.last_time = 0
         self.tapped = False
+        self.drop = False
         self.counter = 0
+        self.pull_counter = 0
         
     def tap(self, x, y):
         self.counter += 1
@@ -48,15 +55,38 @@ class FishingManager:
         return self.tap(random.random() / 20 + 0.473, random.random() / 10 + 0.419)
         
     def start_tap(self, img, img_time):
+        self.fish_count += 1 # 钓鱼次数计数
+        
+        if self.fish_count > 30:
+            self.fish_count = 0
+            # 补充材料
+        
         return self.tap(random.random() / 10 + 0.88, random.random() / 10 + 0.8)
         
     def just_tap(self, img, img_time):
+        self.drop_count = 0 # 鱼上岸，清空计数器
         return self.tap(random.random() / 10 + 0.445, random.random() / 12 + 0.78)
         
     def check_pull(self, img, img_time):
         # 和🐟的拉扯
         self.last_time = img_time
         h, w, _ = img.shape
+        
+        if self.drop:
+            return {"release": (0.9, 0.85)}
+            
+        self.pull_counter += 1
+        if self.config["drop_cheap_fish"] and self.drop_count < self.config['drop_until']: # 只在连续失败次数小于的时候检测
+            green = img[int(h * 0.272), int(w * 0.53), 1] 
+            # print(green, self.pull_counter)
+            if green < 240 and self.pull_counter < self.config["drop_thre"]:
+                self.drop = True
+                self.drop_count += 1
+                print(f"血条下降太快，抛弃鱼，第{self.drop_count}/{self.config['drop_until']}次")
+                # 血条下降太快
+                return {"release": (0.9, 0.85)}
+        
+        
         crop_img = cv2.resize(img[int(h * 0.2): int(h * 0.35), int(w * 0.68): int(w * 0.8)], (150, 100))
         M = cv2.getRotationMatrix2D((10, 50), 25, 1.0)
         rotated = cv2.warpAffine(crop_img[..., 0], M, (80, 30))[5:, 10:]

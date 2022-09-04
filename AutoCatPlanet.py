@@ -26,6 +26,7 @@ class GameManager:
         
         self.src_img = None
         self.src_time = 0
+        self.game_group = 0
         
         self.text = "加载中……"
         self.bbox = {"pt": []}
@@ -54,6 +55,12 @@ class GameManager:
                 text_list = []
                 self.mode = 0
                 for item in self.cfg['data']:
+                    if 'group' not in item:
+                        group = 0
+                    else:
+                        group = item['group']
+                    if group != self.game_group:
+                        continue
                     chn = item['chn']
                     src = self.src_img[...,chn]
                     name = item['file']
@@ -166,6 +173,8 @@ def main(cfg):
             save_img = True
         if event.char in 'pP':
             auto_padding = True and cfg['autopadding']
+        if event.char in '0123456789':
+            gm.game_group = int(event.char)
 
     def get_stick(des, win):
         words = des.split(',')
@@ -177,8 +186,6 @@ def main(cfg):
                 value += int(w)
         return value
 
-    root.bind('<KeyPress>', onKeyPress)
-    
     display_interval = int(1000 / cfg['display_fps'])
     
     last_mode = 0
@@ -186,6 +193,7 @@ def main(cfg):
     f = FishingManager(cfg)
     adb = ADBManager(cfg)
     
+    root.bind('<KeyPress>', onKeyPress)
     
     with mss.mss() as m:
         def capture_stream():

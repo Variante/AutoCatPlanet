@@ -16,7 +16,10 @@
     "repeat": 0,
 	"fishing": {
 		"circle_predict": 15,
-		"pull_release": 30
+		"pull_release": 30,
+		"drop_thre": 70,
+		"drop_until": 1,
+		"drop_cheap_fish": false
 	},
 	"data": [
 		{
@@ -25,7 +28,8 @@
 			"chn": 2,
             "thre": 0.6,
             "comment": "钓鱼开始",
-			"mode": 4
+			"mode": 4,
+			"group": 0
         },
         {
             "file": "fishingcircle.png",
@@ -33,7 +37,8 @@
 			"chn": 2,
             "thre": 0.6,
             "comment": "抛竿",
-			"mode": 1
+			"mode": 1,
+			"group": 0
         },
 		{
             "file": "fishingpull.png",
@@ -41,7 +46,8 @@
 			"chn": 2,
             "thre": 0.6,
             "comment": "拉鱼",
-			"mode": 2
+			"mode": 2,
+			"group": 0
         },
 		{
             "file": "fishingsummary.png",
@@ -49,7 +55,8 @@
 			"chn": 0,
             "thre": 0.6,
             "comment": "鱼结算",
-			"mode": 3
+			"mode": 3,
+			"group": 0
         },
 		{
             "file": "fishingsell.png",
@@ -57,7 +64,8 @@
 			"chn": 1,
             "thre": 0.45,
             "comment": "卖钱结算",
-			"mode": 3
+			"mode": 3,
+			"group": 0
         },
 		{
             "file": "fishingbottle.png",
@@ -65,7 +73,8 @@
 			"chn": 1,
             "thre": 0.6,
             "comment": "漂流瓶",
-			"mode": 5
+			"mode": 5,
+			"group": 0
         },
 		{
             "file": "fishingthrowback.png",
@@ -73,7 +82,8 @@
 			"chn": 1,
             "thre": 0.6,
             "comment": "扔回去",
-			"mode": 3
+			"mode": 3,
+			"group": 0
         }
 	]
 	
