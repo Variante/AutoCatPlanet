@@ -27,6 +27,14 @@ class GameManager:
         self.src_img = None
         self.src_time = 0
         self.game_group = 0
+        self.game_group_list = [
+            '钓鱼',
+            '猫球基因查询'
+        ]
+        
+        for i, j in enumerate(self.game_group_list):
+            print(f'数字{i + 1}: {j} ' + ('[默认]' if i == 0 else ''))
+        print('=' * 8)
         
         self.text = "加载中……"
         self.bbox = {"pt": []}
@@ -39,6 +47,11 @@ class GameManager:
         
         # game mode: 0 默认无检测
         self.mode = 0
+        
+    def get_group(self):
+        if self.game_group >= len(self.game_group_list) or self.game_group < 0:
+            self.game_group = 0
+        return self.game_group_list[self.game_group]
         
     def check_loop(self):
         time.sleep(1)
@@ -149,8 +162,8 @@ def main(cfg):
     # ldtag1.pack()
     # lentry = Entry(app) 
     # lentry.pack()
-    # ldtag = Label(app, font=tkFont.Font(size=15, weight=tkFont.BOLD))
-    # ldtag.pack()
+    ldtag = Label(app, font=tkFont.Font(size=15, weight=tkFont.BOLD))
+    ldtag.pack()
     ldres = Message(app, width=800, font=tkFont.Font(size=15, weight=tkFont.NORMAL))
     ldres.pack()
     
@@ -166,15 +179,18 @@ def main(cfg):
     def onKeyPress(event):
         nonlocal save_img
         nonlocal auto_padding
+        
         # print(event)
         if event.char in ' ':
             gm.pause_game = not gm.pause_game
-        if event.char in 'sS':
+        elif event.char in 'qQ':
+            root.quit()
+        elif event.char in 'sS':
             save_img = True
-        if event.char in 'pP':
+        elif event.char in 'pP':
             auto_padding = True and cfg['autopadding']
-        if event.char in '0123456789':
-            gm.game_group = int(event.char)
+        elif event.char in '123456789':
+            gm.game_group = int(event.char) - 1
 
     def get_stick(des, win):
         words = des.split(',')
@@ -203,8 +219,7 @@ def main(cfg):
 
             win_info = get_window_roi(target_name, [0, 0, 1, 1], [0] * 4 if auto_padding else cfg['padding'])
             if win_info['left'] < 0 and win_info['top'] < 0:
-                ldtag1.configure(text='未检测到窗口')
-                ldtag.configure(text='')
+                ldtag.configure(text='未检测到窗口')
                 ldres.configure(text='')
                 img_cache = None
             else:
@@ -242,6 +257,9 @@ def main(cfg):
                 img_time = time.perf_counter()
                 pil_img = Image.fromarray(img[...,::-1])
                 
+                # change group
+                ldtag.configure(text=gm.get_group())
+                
                 # detect game state
                 gm.check_img(img, img_time)
                 if last_mode != gm.mode:
@@ -263,7 +281,8 @@ def main(cfg):
                 #     img = cv2.circle(img, pt, 5, (0, 0, 255), -1)
 
                 # ldtag1.configure(text=gm.get_repeat())
-                # ldtag.configure(text='')
+                
+                
                 ldres.configure(text=gm.text)
                 
                 if save_img:
@@ -286,6 +305,7 @@ def main(cfg):
                 imgtk = ImageTk.PhotoImage(image=pil_img)
                 lmain.imgtk = imgtk
                 lmain.configure(image=imgtk)
+                
             lmain.after(display_interval, capture_stream) 
 
         capture_stream()
@@ -294,7 +314,7 @@ def main(cfg):
     adb.stop_loop()
 
 def usage():
-    print("AutoCatPlanet操作说明:\nS:保存当前截图\nP:估计config中padding的数值,需要手动更改\n空格:暂停/恢复\n" + '-'*8)
+    print("AutoCatPlanet操作说明:\nS:保存当前截图\nP:估计config中padding的数值,建议得到结果后手动更改config.json\n空格:暂停/恢复\nQ:退出\n" + '-'*8)
 
 
 if __name__ == '__main__':
