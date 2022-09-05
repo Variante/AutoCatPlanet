@@ -119,6 +119,15 @@
             "comment": "详细猫球信息",
 			"mode": 11,
 			"group": 1
+        },
+		{
+            "file": "genedone.png",
+            "area": [0.41, 0.16, 0.58, 0.26],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "孵化成功",
+			"mode": 13,
+			"group": 1
         }
 		
 	]

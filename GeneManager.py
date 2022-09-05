@@ -42,7 +42,7 @@ class GeneManager:
                 f.write(i)
         """
         
-        self.mode = [10, 11, 12]
+        self.mode = [10, 11, 12, 13]
         self.last_ocr = None
         self.last_other_ocr = None
         self.display = Image.new(mode="RGB", size=(834, 300),  color = (200, 200, 200))
@@ -60,6 +60,10 @@ class GeneManager:
         
         
     def scan(self, img, mode):
+        if mode == 13:
+            self.my_tag = None
+            self.other_tag = None
+            return 
         h, w, _ = img.shape
         if mode == 11:
             img[int(0.3 * h): int(0.533 * h), int(0.05 * w): int(0.324 * w)] = 255 # 掩盖4属性
