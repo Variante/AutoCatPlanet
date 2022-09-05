@@ -80,8 +80,8 @@ class GeneManager:
             
         tp, tags = self._scan_my_cat(to_ocr)
         text = f"检测到: [{tp}]{' '.join(tags)}\n--------\n"
-        if len(tags) < 3 or len(tags) > 6 or tp not in self.data['type']:
-            text += "检测出现问题"
+        if len(tags) > 6 or tp not in self.data['type']:
+            # print("检测出现问题", tp, tags)
             return
             
         self.text = text + self.find_theme((tp, tags))
