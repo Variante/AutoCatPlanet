@@ -7,12 +7,14 @@ from PIL import Image, ImageDraw, ImageFont, ImageTk
 from itertools import combinations
 import numpy as np
 import cv2
-from datetime import datetime
 import threading
 import random
 import time
 from FishingManager import *
+from GeneManager import *
+from OCRManager import *
 from ADBManager import *
+from datetime import datetime
 
 
 class GameManager:
@@ -175,16 +177,21 @@ def main(cfg):
 
     save_img = False
     auto_padding = False
+    do_test = False
     
     def onKeyPress(event):
         nonlocal save_img
         nonlocal auto_padding
+        nonlocal do_test
         
         # print(event)
         if event.char in ' ':
             gm.pause_game = not gm.pause_game
         elif event.char in 'qQ':
             root.quit()
+        # 采集猫球基因用
+        # elif event.char in 'uio':
+        #     do_test = event.char
         elif event.char in 'sS':
             save_img = True
         elif event.char in 'pP':
@@ -206,6 +213,8 @@ def main(cfg):
     
     last_mode = 0
     gm = GameManager(cfg)
+    ocr = OCRManager()
+    gene = GeneManager(cfg, ocr)
     f = FishingManager(cfg)
     adb = ADBManager(cfg)
     
@@ -216,6 +225,7 @@ def main(cfg):
             nonlocal save_img
             nonlocal last_mode
             nonlocal auto_padding
+            nonlocal do_test
 
             win_info = get_window_roi(target_name, [0, 0, 1, 1], [0] * 4 if auto_padding else cfg['padding'])
             if win_info['left'] < 0 and win_info['top'] < 0:
@@ -269,10 +279,30 @@ def main(cfg):
                 # check with Fishing manager
                 if last_mode in f.mode:
                     action = f.mode[gm.mode](img, img_time)
+                elif last_mode in gene.mode:
+                    gene.scan(img, last_mode)
+                    action = {}
+                    time.sleep(0.1)
                 else:
                     action = {}
                     
                 adb.parse_action(action)
+                
+                if gm.game_group == 1:
+                    main_text = '\n'.join([gm.text, gene.text])
+                else:
+                    main_text = gm.text
+                
+                
+                
+                if do_test == 'u':
+                    gene.scan_green_gene(img)
+                if do_test == 'i':
+                    gene.scan_blue_gene(img)
+                if do_test == 'o':
+                    gene.scan_red_gene(img)
+                do_test = False
+                    
                 
                 """
                 draw vis
@@ -283,7 +313,7 @@ def main(cfg):
                 # ldtag1.configure(text=gm.get_repeat())
                 
                 
-                ldres.configure(text=gm.text)
+                ldres.configure(text=main_text)
                 
                 if save_img:
                     now = datetime.now()

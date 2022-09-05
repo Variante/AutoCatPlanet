@@ -14,6 +14,14 @@
     "display_fps": 30,
     "check_fps": 5,
     "repeat": 0,
+	"gene": {
+		"blue_score": 2,
+		"green_score": 1,
+		"type_score": 1,
+		"display": 5,
+		"want": [],
+		"ignore": ["海湾救援"]
+	},
 	"fishing": {
 		"circle_predict": 15,
 		"pull_release": 30,
@@ -84,7 +92,26 @@
             "comment": "扔回去",
 			"mode": 3,
 			"group": 0
+        },
+		{
+            "file": "genehatch.png",
+            "area": [0.16, 0.85, 0.22, 0.89],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "猫球基因信息",
+			"mode": 10,
+			"group": 1
+        },
+		{
+            "file": "geneinfo.png",
+            "area": [0.65, 0.14, 0.80, 0.32],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "猫球信息",
+			"mode": 11,
+			"group": 1
         }
+		
 	]
 	
 }
