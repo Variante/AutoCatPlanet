@@ -166,7 +166,7 @@ def main(cfg):
     # lentry.pack()
     ldtag = Label(app, font=tkFont.Font(size=15, weight=tkFont.BOLD))
     ldtag.pack()
-    ldres = Message(app, width=800, font=tkFont.Font(size=15, weight=tkFont.NORMAL))
+    ldres = Message(app, width=800, font=tkFont.Font(size=13, weight=tkFont.NORMAL))
     ldres.pack()
     
     root.title('AutoCatPlanet')
@@ -288,13 +288,6 @@ def main(cfg):
                     
                 adb.parse_action(action)
                 
-                if gm.game_group == 1:
-                    main_text = '\n'.join([gm.text, gene.text])
-                else:
-                    main_text = gm.text
-                
-                
-                
                 if do_test == 'u':
                     gene.scan_green_gene(img)
                 if do_test == 'i':
@@ -303,38 +296,28 @@ def main(cfg):
                     gene.scan_red_gene(img)
                 do_test = False
                     
-                
-                """
-                draw vis
-                """
-                # for pt in gm.bbox["pt"]:
-                #     img = cv2.circle(img, pt, 5, (0, 0, 255), -1)
-
-                # ldtag1.configure(text=gm.get_repeat())
-                
-                
-                ldres.configure(text=main_text)
-                
                 if save_img:
                     now = datetime.now()
                     date_time = now.strftime("./%H-%M-%S")
                     pil_img.save(date_time + ".png")
                     save_img = False
                 
-                """
-                if last_mode == 0:
-                    if scale > 0:
-                        pil_img = pil_img.resize((int(pil_img.size[0] * scale), int(pil_img.size[1] * scale)))
-                else:
-                """
                 
-                pil_img = Image.fromarray(np.hstack([cv2.resize(img, (534, 300)), f.display])[...,::-1])
+                if gm.game_group == 1:
+                    main_text = '\n'.join([gm.text, gene.text])
+                    display = gene.display
+                else:
+                    main_text = gm.text
+                    display = Image.fromarray(np.hstack([cv2.resize(img, (534, 300)), f.display])[...,::-1])
+                    
+                pil_img = display
                 
                 # print(gm.mode)
                 # update the display
                 imgtk = ImageTk.PhotoImage(image=pil_img)
                 lmain.imgtk = imgtk
                 lmain.configure(image=imgtk)
+                ldres.configure(text=main_text)
                 
             lmain.after(display_interval, capture_stream) 
 
