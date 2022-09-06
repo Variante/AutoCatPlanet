@@ -31,7 +31,7 @@ class GameManager:
         self.game_group = 0
         self.game_group_list = [
             '钓鱼',
-            '猫球基因查询'
+            '猫球基因预测'
         ]
         
         for i, j in enumerate(self.game_group_list):

@@ -45,7 +45,7 @@ class GeneManager:
         self.mode = [10, 11, 12, 13]
         self.last_ocr = None
         self.last_other_ocr = None
-        self.display = Image.new(mode="RGB", size=(834, 300),  color = (200, 200, 200))
+        self.display = Image.new(mode="RGB", size=(834, 300),  color = (240, 240, 240))
         self.part = ['眼睛', '嘴巴', '花纹', '肤色', '耳朵', '尾巴', '猫种']
         self.text = ''
         self.my_theme_text = ''
@@ -63,6 +63,7 @@ class GeneManager:
         if mode == 13:
             self.my_tag = None
             self.other_tag = None
+            self.display = Image.new(mode="RGB", size=(834, 300),  color = (240, 240, 240))
             return 
         h, w, _ = img.shape
         if mode == 11:
