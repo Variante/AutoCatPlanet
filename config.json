@@ -20,7 +20,7 @@
 		"type_score": 1,
 		"display": 5,
 		"want": [],
-		"ignore": ["海湾救援"]
+		"ignore": []
 	},
 	"fishing": {
 		"circle_predict": 15,

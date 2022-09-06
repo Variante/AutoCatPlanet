@@ -261,7 +261,7 @@ class GeneManager:
         # print('-' * 8)
         def to_text(theme, score, need_text):
             if len(need_text):
-                return f'{theme}({score}) 需求: {need_text}'
+                return f'{theme}({score}) 需求:{need_text}'
             else:
                 return f'{theme}({score}): 已达成'
         
