@@ -14,6 +14,12 @@
     "display_fps": 30,
     "check_fps": 5,
     "repeat": 0,
+	"graffiti": {
+		"select1": [2, 5], 
+		"select2": [2, 4], 
+		"select3": [1, 3], 
+		"select4": [1, 2] 
+	},
 	"gene": {
 		"blue_score": 2,
 		"green_score": 1,
@@ -23,7 +29,7 @@
 		"ignore": []
 	},
 	"fishing": {
-		"circle_predict": 15,
+		"circle_predict": 16.5,
 		"pull_release": 30,
 		"drop_thre": 70,
 		"drop_until": 1,
@@ -128,7 +134,89 @@
             "comment": "孵化成功",
 			"mode": 13,
 			"group": 1
+        },
+		{
+            "file": "graffstart.png",
+            "area": [0.84, 0.853, 0.93, 0.922],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "开始涂鸦",
+			"mode": 20,
+			"group": 2
+        },
+		{
+            "file": "graffexit.png",
+            "area": [0.813, 0.853, 0.895, 0.915],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "结算涂鸦",
+			"mode": 20,
+			"group": 2
+        },
+		{
+            "file": "graff1map2.png",
+            "area": [0.70, 0.14, 0.75, 0.55],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "涂鸦1图2",
+			"mode": 23,
+			"group": 2
+        },
+		{
+            "file": "graff1map1.png",
+            "area": [0.70, 0.47, 0.75, 0.55],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "涂鸦1图1",
+			"mode": 22,
+			"group": 2
+        },
+		{
+            "file": "graff1map0.png",
+            "area": [0.70, 0.14, 0.75, 0.22],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "涂鸦1图0",
+			"mode": 21,
+			"group": 2
+        },
+		{
+            "file": "graffautostart.png",
+            "area": [0.127, 0.632, 0.172, 0.7],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "一键配置后开始",
+			"mode": 24,
+			"group": 2
+        },
+		{
+            "file": "grafffinalbattle.png",
+            "area": [0.02, 0.63, 0.10, 0.79],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "最终战准备",
+			"mode": 25,
+			"group": 2
+        },
+		{
+            "file": "grafffinalbattle.png",
+            "area": [0.32, 0.22, 0.97, 0.7],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "最终战开始",
+			"mode": 26,
+			"group": 2
+        },
+		{
+            "file": "graffselect.png",
+            "area": [0.04, 0.48, 0.26, 0.6],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "武装选择",
+			"mode": 27,
+			"group": 2
         }
+		
 		
 	]
 	

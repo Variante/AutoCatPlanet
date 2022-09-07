@@ -14,6 +14,7 @@ from FishingManager import *
 from GeneManager import *
 from OCRManager import *
 from ADBManager import *
+from GraffitiManager import *
 from datetime import datetime
 
 
@@ -30,8 +31,9 @@ class GameManager:
         self.src_time = 0
         self.game_group = 0
         self.game_group_list = [
-            '钓鱼',
-            '猫球基因预测'
+            '半自动钓鱼',
+            '猫球基因预测',
+            '自动涂鸦一本'
         ]
         
         for i, j in enumerate(self.game_group_list):
@@ -217,6 +219,7 @@ def main(cfg):
     gene = GeneManager(cfg, ocr)
     f = FishingManager(cfg)
     adb = ADBManager(cfg)
+    graff = GraffitiManager(cfg)
     
     root.bind('<KeyPress>', onKeyPress)
     
@@ -274,6 +277,7 @@ def main(cfg):
                 gm.check_img(img, img_time)
                 if last_mode != gm.mode:
                     f.clear()
+                    graff.clear()
                     adb.release_all_keys()
                 last_mode = gm.mode
                 # check with Fishing manager
@@ -281,13 +285,16 @@ def main(cfg):
                     action = f.mode[gm.mode](img, img_time)
                 elif last_mode in gene.mode:
                     gene.scan(img, last_mode)
-                    action = {}
+                    action = []
+                    time.sleep(0.1)
+                elif last_mode in graff.mode:
+                    action = graff.action(gm.mode, img)
                     time.sleep(0.1)
                 else:
-                    action = {}
-                    
-                adb.parse_action(action)
+                    action = []
                 
+                # print(action)
+                adb.parse_action(action)
                 if do_test == 'u':
                     gene.scan_green_gene(img)
                 if do_test == 'i':

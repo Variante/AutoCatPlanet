@@ -118,7 +118,7 @@ class ADBManager:
         # finally release
         # use adb shell getevent -l to monitor events!
         
-    def parse_action(self, action):
+    def parse_action(self, actions):
         # code = '10' # 增加了一个虚拟按钮
         code = '1'
         def cvt_corr(xy):
@@ -129,15 +129,20 @@ class ADBManager:
             x, y = xy
             return (int(x * self.config["adb_shape"][0]), int(y * self.config["adb_shape"][1]))
 
-        if 'tap' in action:
-            self.send_tap_event(cvt_corr(action['tap']), code="1")
+        if not isinstance(actions, list):
+            actions = [actions]
             
-        elif 'release' in action:
-            self.send_release_event(cvt_corr(action['release']), code=code)
-            
-        elif 'press' in action:
-            self.send_press_event(cvt_corr(action['press']), code=code)
-        
+        for action in actions:
+            cmd, para = action
+            if cmd == 'wait':
+                time.sleep(para)
+            elif cmd == 'tap':
+                self.send_tap_event(cvt_corr(para), code="1")
+            elif cmd == 'release':
+                self.send_release_event(cvt_corr(para), code=code)
+            elif cmd == 'press':
+                self.send_press_event(cvt_corr(para), code=code)
+    
        
 if __name__ == '__main__':
     cfg = load_cfg()

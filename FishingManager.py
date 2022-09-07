@@ -42,12 +42,10 @@ class FishingManager:
     def tap(self, x, y):
         self.counter += 1
         if not self.tapped or self.counter > 30:
-            res = {
-                "tap": (x, y)
-            }
+            res = ("tap", (x, y))
             self.counter = 0
         else:
-            res = {}
+            res = []
         self.tapped = True
         return res
         
@@ -73,7 +71,7 @@ class FishingManager:
         h, w, _ = img.shape
         
         if self.drop:
-            return {"release": (0.9, 0.85)}
+            return ("release", (0.9, 0.85))
             
         self.pull_counter += 1
         if self.config["drop_cheap_fish"] and self.drop_count < self.config['drop_until']: # 只在连续失败次数小于的时候检测
@@ -84,7 +82,7 @@ class FishingManager:
                 self.drop_count += 1
                 print(f"血条下降太快，抛弃鱼，第{self.drop_count}/{self.config['drop_until']}次")
                 # 血条下降太快
-                return {"release": (0.9, 0.85)}
+                return ("release", (0.9, 0.85))
         
         
         crop_img = cv2.resize(img[int(h * 0.2): int(h * 0.35), int(w * 0.68): int(w * 0.8)], (150, 100))
@@ -116,13 +114,13 @@ class FishingManager:
         # print(rotated.shape)
         # cv2.imshow('Pull', np.vstack([rotated, thre]))
         # cv2.waitKey(0)
-        return { "press" if press else "release": (0.9, 0.85) } # 如果不使用虚拟按键
+        return ("press" if press else "release", (0.9, 0.85)) # 如果不使用虚拟按键
         # return { "press" if press else "release": None }
 
     def check_circle(self, img, img_time):
         # 抛竿时机的把握
         if self.tapped:
-            return {}
+            return []
         h, w, _ = img.shape
         crop_img = cv2.resize(img[int(h * 0.495): int(h * 0.505), int(w * 0.5): int(w * 0.7)], (300, 10))
         rot_img = np.rot90(crop_img, 3)
@@ -200,11 +198,9 @@ class FishingManager:
         
         if tap:
             self.tapped = True
-            return {
-                "tap": None,
-            }
+            return ("tap", None)
         else:
-            return {}
+            return []
         
         
         
