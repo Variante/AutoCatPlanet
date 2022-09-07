@@ -32,7 +32,7 @@ class GraffitiManager:
         if self.tapped:
             return []
         self.tapped = True
-        return ("tap", (x, y))
+        return [("tap", (x, y)), ("wait", 1)]
         
     def action(self, mode, img):
         code = self.mode[mode]
@@ -48,7 +48,7 @@ class GraffitiManager:
         if self.tapped:
             return []
         self.tapped = True
-        return [("tap", (np.random.uniform(0.88, 0.96), np.random.uniform(0.75, 0.79))), ('wait', 0.8), ("tap", (np.random.uniform(0.78, 0.96), np.random.uniform(0.89, 0.94)))]
+        return [("tap", (np.random.uniform(0.88, 0.96), np.random.uniform(0.75, 0.79))), ('wait', 0.8), ("tap", (np.random.uniform(0.78, 0.96), np.random.uniform(0.89, 0.94))), ('wait', 0.8)]
         
     def renew_selection(self, mode, img):
         if self.tapped:
@@ -68,5 +68,6 @@ class GraffitiManager:
             
         # confirm
         res.append(('tap', (np.random.uniform(0.85, 0.96), np.random.uniform(0.9, 0.96))))
+        res.append(('wait', np.random.uniform(1, 2)))
         self.tapped = True
         return res
