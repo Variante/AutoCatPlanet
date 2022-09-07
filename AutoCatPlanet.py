@@ -33,7 +33,10 @@ class GameManager:
         self.game_group_list = [
             '半自动钓鱼',
             '猫球基因预测',
-            '自动涂鸦一本'
+            '自动涂鸦一本',
+            '自动涂鸦二本(未完成)',
+            '自动涂鸦三本(未完成)',
+            '自动涂鸦四本(未完成)'
         ]
         
         for i, j in enumerate(self.game_group_list):
@@ -76,7 +79,9 @@ class GameManager:
                         group = 0
                     else:
                         group = item['group']
-                    if group != self.game_group:
+                    if not isinstance(group, list):
+                        group = [group]
+                    if self.game_group not in group:
                         continue
                     chn = item['chn']
                     src = self.src_img[...,chn]
@@ -110,7 +115,9 @@ class GameManager:
 
                     if val > thre:
                         tmp_text += " √"
-                        self.mode = item['mode']            
+                        self.mode = item['mode']
+                        if isinstance(self.mode, list):
+                            self.mode = self.mode[group.index(self.game_group)]
                     text_list.append(tmp_text)
                     
                 self.text = '\n'.join(text_list)
