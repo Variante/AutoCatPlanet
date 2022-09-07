@@ -45,7 +45,7 @@ class GraffitiManager:
         if self.tapped:
             return []
         self.tapped = True
-        return [("tap", (random.random() / 20 + 0.89, random.random() / 20 + 0.75)), ('wait', 0.2), ("tap", (random.random() / 20 + 0.85, random.random() / 10 + 0.90))]
+        return [("tap", (np.random.uniform(0.88, 0.96), np.random.uniform(0.75, 0.79))), ('wait', 0.8), ("tap", (np.random.uniform(0.78, 0.96), np.random.uniform(0.89, 0.94)))]
         
     def renew_selection(self, img):
         if self.tapped:

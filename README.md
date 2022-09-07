@@ -88,7 +88,7 @@ Q:退出
 ```
 
 ### 自动刷涂鸦
-首先替换img中的grafffinalbattle.png为你的最终阵容，随后修改在config中的这个部分来选择你的阵容。注意使用graffselect时的武装顺序应为第二场小战斗结束后的武装顺序。
+首先替换img中的grafffinalbattle.png为你的最终阵容，随后修改在config中的这个部分来选择你的阵容。注意使用graffselect时的武装顺序应为第二场小战斗结束后的武装顺序。后面可能按需增加自动识别位置。
 
 ```
 "graffiti": {
