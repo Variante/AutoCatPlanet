@@ -17,7 +17,7 @@
 	"graffiti": {
 		"select1": [[2, 5], [2, 4], [1, 3], [1, 2]],
 		"select2": [[2, 5], [2, 4], [1, 3], [1, 2]],
-		"select3": [[2, 5], [2, 4], [1, 3], [1, 2]], 
+		"select3": [[2, 5], [2, 4], [1, 1], [1, 2]], 
 		"select4": [[2, 5], [2, 4], [1, 3], [1, 2]] 
 	},
 	"gene": {
@@ -181,6 +181,33 @@
 			"group": 2
         },
 		{
+            "file": "graff3map2.png",
+            "area": [0.273, 0.70, 0.312, 0.78],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "涂鸦3图2",
+			"mode": 23,
+			"group": 4
+        },
+		{
+            "file": "graff3map1.png",
+            "area": [0.273, 0.70, 0.312, 0.78],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "涂鸦3图1",
+			"mode": 28,
+			"group": 4
+        },
+		{
+            "file": "graff3map0.png",
+            "area": [0.706, 0.660, 0.744, 0.744],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "涂鸦3图0",
+			"mode": 27,
+			"group": 4
+        },
+		{
             "file": "graffautostart.png",
             "area": [0.127, 0.632, 0.172, 0.7],
 			"chn": 1,
@@ -206,6 +233,15 @@
             "comment": "一图最终战开始",
 			"mode": 26,
 			"group": 2
+        },
+		{
+            "file": "graff3final.png",
+            "area": [0.32, 0.22, 0.97, 0.7],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "三图最终战开始",
+			"mode": 26,
+			"group": 4
         },
 		{
             "file": "graffselect.png",

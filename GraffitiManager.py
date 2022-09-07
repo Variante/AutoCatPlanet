@@ -17,6 +17,7 @@ class GraffitiManager:
             24: self.auto_start_battle,
             25: (0.82, 0.3, 0.97, 0.5),
             26: (0.85, 0.9, 0.9, 0.95),
+            27: (0.706, 0.660, 0.744, 0.744),
             31: self.renew_selection,
             32: self.renew_selection,
             33: self.renew_selection,
