@@ -263,7 +263,7 @@ class GeneManager:
             if len(need_text):
                 return f'{theme}({score}) 需求:{need_text}'
             else:
-                return f'{theme}({score}): 已达成'
+                return f'{theme}({score}) 已达成'
         
         
         for i in self.data['red']:
