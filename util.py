@@ -3,10 +3,6 @@ import json
 import win32gui
 
 
-def get_patch(img, area):
-    h, w = img.shape[:2]
-    return img[int(h * area[1]): int(h * area[3]), int(w * area[0]): int(w * area[2])]
-
 def load_cfg(file='./config.json'):
     with open(file, 'r', encoding="utf-8") as f:
         content = f.read()

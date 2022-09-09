@@ -34,7 +34,7 @@ class GameManager:
             '半自动钓鱼',
             '猫球基因预测',
             '自动涂鸦一本',
-            '自动涂鸦二本(未完成)',
+            '自动涂鸦二本',
             '自动涂鸦三本',
             '自动涂鸦四本(未完成)'
         ]
@@ -93,7 +93,7 @@ class GameManager:
                     
                         
                     # print(src.shape, area)
-                    src_c = get_patch(src, area)
+                    src_c = crop_image_by_pts(src, area)
                     # print(src.shape, tgt.shape)
                     tgt_c = cv2.resize(tgt, (src_c.shape[1], src_c.shape[0]))
                     
@@ -142,7 +142,7 @@ class GameManager:
             img = cv2.resize(img, (w, h))
             # print(img.shape)
             area = item['area']
-            self.img_dict[comment] = get_patch(img, area)
+            self.img_dict[comment] = crop_image_by_pts(img, area)
             
     def check_img(self, src, src_time):
         self.src_img = src
