@@ -24,6 +24,7 @@
 		"blue_score": 2,
 		"green_score": 1,
 		"type_score": 1,
+		"noise_score": -0.1,
 		"display": 5,
 		"want": [],
 		"ignore": []

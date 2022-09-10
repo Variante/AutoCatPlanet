@@ -107,7 +107,7 @@ class GeneManager:
         else:
             # 检测自己的猫球主题
             self.my_tag = (tp, tags)
-            self.my_theme_text = self.find_theme((tp, tags), strict=False)
+            self.my_theme_text = self.find_theme((tp, tags), hatch_result=False)
         
         # GUI
         display = Image.new(mode="RGB", size=(834, 300),  color = (240, 240, 240))
@@ -117,16 +117,16 @@ class GeneManager:
         
         draw = ImageDraw.Draw(display)
         for i, j in enumerate(self.part):
-            draw.text((15, 30 * i + 50),  j, font=font, fill=(40, 40, 40))
+            draw.text((5, 30 * i + 50),  j, font=s_font, fill=(40, 40, 40))
             
-        draw.text((80, 20),  '我的', font=font, fill=(40, 40, 40))
-        draw.text((160, 20),  '配对', font=font, fill=(40, 40, 40))
-        draw.text((240, 20),  '可能的基因', font=font, fill=(40, 40, 40))
+        draw.text((60, 20),  '我的', font=font, fill=(40, 40, 40))
+        draw.text((140, 20),  '配对', font=font, fill=(40, 40, 40))
+        draw.text((220, 20),  '可能的基因', font=font, fill=(40, 40, 40))
         
         
         def draw_tag(t, px):
             pos, color = get_tag_info(t)
-            draw.text((px, pos * 30 + 55),  t, font=s_font, fill=color)
+            draw.text((px, pos * 30 + 50),  t, font=s_font, fill=color)
             
         def get_tag_info(t):
             if t in self.data['type']:
@@ -141,12 +141,12 @@ class GeneManager:
         if self.my_tag is not None:
             # text += f"\n我的猫球: [{self.my_tag[0][0]}]{' '.join(self.my_tag[1])}"
             for i in self.my_tag[1] + self.my_tag[0]:
-                draw_tag(i, 80)
+                draw_tag(i, 50)
         if self.other_tag is not None:
             # text += f"\n配对猫球: [{self.other_tag[0][0]}]{' '.join(self.other_tag[1])}"
             
             for i in self.other_tag[1] + self.other_tag[0]:
-                draw_tag(i, 160)
+                draw_tag(i, 130)
         text += '\n我的猫球主题:\n' + self.my_theme_text
         
         
@@ -160,25 +160,25 @@ class GeneManager:
             for i in gene_list:
                 pos, color = get_tag_info(i)
                 if px[pos] < 3:
-                    draw.text((px[pos] * 80 + 240, pos * 30 + 49),  i, font=ss_font, fill=color)
+                    draw.text((px[pos] * 70 + 215, pos * 30 + 49),  i, font=ss_font, fill=color)
                 else:
-                    draw.text(((px[pos] - 3) * 80 + 240, pos * 30 + 61),  i, font=ss_font, fill=color)
+                    draw.text(((px[pos] - 3) * 70 + 215, pos * 30 + 61),  i, font=ss_font, fill=color)
                 px[pos] += 1
                 
             for i in type_list:
-                draw.text((px[6] * 80 + 240, 6 * 30 + 55),  i, font=s_font, fill=(40, 40, 40))
+                draw.text((px[6] * 70 + 215, 6 * 30 + 50),  i, font=s_font, fill=(40, 40, 40))
                 px[6] += 1
                 
             # 绘制主题得分
-            draw.text((480, 20),  '可能的主题得分', font=font, fill=(40, 40, 40))
-            scores = self.find_theme((type_list, gene_list), strict=True).split('\n\n')
+            draw.text((430, 20),  '可能的主题得分', font=font, fill=(40, 40, 40))
+            scores = self.find_theme((type_list, gene_list), hatch_result=True).split('\n\n')
             line = -1
             for i, s in enumerate(scores):
                 line += 1
                 m_tags = s.split()
-                draw.text((480, line * 18 + 49),  m_tags[0], font=ss_font, fill=(max(255 - i * 20, 0), 40, 40))
+                draw.text((420, line * 18 + 49),  m_tags[0], font=ss_font, fill=(max(255 - i * 20, 0), 40, 40))
                 for t, j in enumerate(m_tags[2:]):
-                    draw.text((560 if t % 2 == 0 else 720, line * 18 + 49),  j, font=ss_font, fill=(max(255 - i * 20, 0), 40, 40))
+                    draw.text((510 if t % 2 == 0 else 670, line * 18 + 49),  j, font=ss_font, fill=(max(255 - i * 20, 0), 40, 40))
                     if t % 2 == 1:
                         line += 1
             
@@ -255,21 +255,21 @@ class GeneManager:
         
         return text, possible_tp, biggene
     
-    def find_theme(self, source, strict):
+    def find_theme(self, source, hatch_result):
         want_text = []
         text = []
         # print('-' * 8)
         def to_text(theme, score, need_text):
             if len(need_text):
-                return f'{theme}({score}) 需求:{need_text}'
+                return f'{theme}({score:.1f}) 需求:{need_text}'
             else:
-                return f'{theme}({score}) 已达成'
+                return f'{theme}({score:.1f}) 已达成'
         
         
         for i in self.data['red']:
             if i in self.config['ignore']:
                 continue
-            score, need_text = self._plan(source, i, strict)
+            score, need_text = self._plan(source, i, hatch_result)
             
             if i in self.config['want']:
                 want_text.append((i, score, need_text))
@@ -285,7 +285,7 @@ class GeneManager:
         return '\n\n'.join(wt + t)
         
         
-    def _plan(self, source, target, strict=False):
+    def _plan(self, source, target, hatch_result=False):
         tp, tags = source
         score = 0
         tgt = self.data['red'][target]
@@ -294,20 +294,26 @@ class GeneManager:
         
         # 猫种相同
         if tgt['type'][0] in tp:
-            score += self.config['type_score']
+            score += self.config['type_score'] * 2
         else:
             need_text += f"[{tgt['type'][0]}]"
-            if strict:
+            if hatch_result:
                 need_text = "猫种不匹配"
                 return -100, need_text
         
+        right_pool = set()
+        
         for pre in tgt['pre']:
+            right_pool.add(pre)
+            tgt_p = self.data['blue'][pre]
+            for pre_p in tgt_p['pre']:
+                right_pool.add(pre_p)
+                
             if pre in tags:
                 # 检测蓝色基因
                 score += (self.config['blue_score'] + self.config['type_score'])         
             else:
                 # 查看不存在的基因的组合
-                tgt_p = self.data['blue'][pre]
                 for pre_p in tgt_p['pre']:
                     if pre_p in tags:
                         # 符合一个绿色基因
@@ -322,6 +328,11 @@ class GeneManager:
                     # 一个基因都没有
                     need_text += f" {pre}({'/'.join(tgt_p['pre'])})"
         # print(score, need_text)
+        # 只在评估孵化时有效
+        if hatch_result:
+            for i in tags:
+                if i not in right_pool:
+                    score += self.config['noise_score']
         return score, need_text
                     
                 
