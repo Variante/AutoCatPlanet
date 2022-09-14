@@ -29,15 +29,19 @@ class GraffitiManager:
             
         }
         self.tapped = False
+        self.counter = 0
         self.src = cv2.imread('./img/graffselect.png')[:, :, 1]
         
     def clear(self):
         self.tapped = False
+        self.counter = 0
         
     def tap(self, c):
-        if self.tapped:
+        if self.tapped and self.counter < 30:
+            self.counter += 1
             return []
         self.tapped = True
+        self.counter = 0
         x, y = np.random.uniform(c[0], c[2]), np.random.uniform(c[1], c[3])
         return [("wait", 0.5), ("tap", (x, y)), ("wait", 1)]
 
