@@ -207,39 +207,39 @@ class GeneManager:
         
         gene = [set() for _ in range(6)]
         
+        tags = self.my_tag[1] + self.other_tag[1]
+        blue_tags = []
         # 可能出现的基因
-        for i in self.my_tag[1] + self.other_tag[1]:
+        for i in tags:
             # 现有的绿
             if i in self.data['green']:
                 pos = self.data['green'][i]['pos']
                 gene[pos].add(i)
+            # 现有的蓝
+            elif i in self.data['blue']:
+                blue_tags.append(i)
                 
         # 组合的蓝
         for i in self.data['blue']:
             pos = self.data['blue'][i]['pos']
-            if i not in gene[pos]:
-                for j in self.data['blue'][i]['pre']:
-                    if j not in gene[pos]: # 没有绿基因
-                        break
+            for j in self.data['blue'][i]['pre']:
+                if j not in gene[pos]: # 绿基因没有在池子中
+                    break
+            else:
+                ts = set(self.data['blue'][i]['type']).intersection(possible_tp)
+                # print(i, ts, self.data['blue'][i])
+                # 猫种允许，添加
+                if len(ts) > 0:
+                    gene[pos].add(i)
                 else:
-                    ts = set(self.data['blue'][i]['type']).intersection(possible_tp)
-                    # print(i, ts, self.data['blue'][i])
-                    # 猫种允许，添加
-                    if len(ts) > 0:
-                        gene[pos].add(i)
-                    else:
-                        pass
-                        # print("猫种不允许", self.data['blue'][i]['type'], possible_tp, self.data['blue'][i]['pre'])
+                    pass
+                    # print("猫种不允许", self.data['blue'][i]['type'], possible_tp, self.data['blue'][i]['pre'])
         
-        # 可能出现的基因
-        for i in self.my_tag[1] + self.other_tag[1]:
-            # 现有的蓝
-            if i in self.data['blue']:
-                pos = self.data['blue'][i]['pos']
-                gene[pos].add(i)
-                gene[pos].update(self.data['blue'][i]['pre'])
-
-        
+        # 由蓝色基因可能产生的绿色基因
+        for i in blue_tags:
+            pos = self.data['blue'][i]['pos']
+            gene[pos].add(i)
+            gene[pos].update(self.data['blue'][i]['pre'])
         
         biggene = []
         text += '可能的基因:\n'
@@ -248,9 +248,7 @@ class GeneManager:
             p.sort(key=lambda x: 0 if x in self.data['blue'] else 1)
             text += self.part[j] + ':' + ','.join(p) + '\n'
             biggene.extend(p)
-            
-            
-            
+        
         # text += '-' * 8 + '\n可能的主题得分:\n' + self.find_theme((possible_tp, biggene))
         
         return text, possible_tp, biggene
@@ -412,3 +410,9 @@ class GeneManager:
             'type': tpstr,
             'pre': pre
         }
+
+
+if __name__ == '__main__':
+    cfg = load_cfg()
+    gm = GeneManager(cfg, None)
+    input('Press any key to exit')
