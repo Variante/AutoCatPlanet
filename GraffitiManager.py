@@ -24,6 +24,8 @@ class GraffitiManager:
             33: self.new_selection,
             34: self.new_selection,
             50: (0.5, 0.65, 0.9, 0.71),
+            51: (0.71, 0.5, 0.75, 0.56), 
+            52: (0.28, 0.5, 0.32, 0.56), 
             
         }
         self.tapped = False
@@ -37,7 +39,7 @@ class GraffitiManager:
             return []
         self.tapped = True
         x, y = np.random.uniform(c[0], c[2]), np.random.uniform(c[1], c[3])
-        return [("tap", (x, y)), ("wait", 1)]
+        return [("wait", 0.5), ("tap", (x, y)), ("wait", 1)]
 
 
     def action(self, mode, img):
@@ -88,7 +90,7 @@ class GraffitiManager:
             cv2.waitKey(0)
             """
             res.append(("tap", (np.random.uniform(max_indx[0] + src.shape[1] / 2, max_indx[0] + src.shape[0] / 2 + 50) / img.shape[1],
-                                np.random.uniform(max_indx[1] + src.shape[0] / 2, max_indx[1] + src.shape[1] / 2 + 50) / img.shape[0])))
+                                np.random.uniform(max_indx[1] + src.shape[0] / 2, max_indx[1] + src.shape[1] / 2 + 10) / img.shape[0])))
             res.append(('wait', np.random.uniform(0.5, 1)))
             
         # confirm

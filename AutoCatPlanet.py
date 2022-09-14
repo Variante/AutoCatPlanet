@@ -36,7 +36,7 @@ class GameManager:
             '自动涂鸦一本',
             '自动涂鸦二本',
             '自动涂鸦三本',
-            '自动涂鸦四本(未完成)'
+            '自动涂鸦四本'
         ]
         
         for i, j in enumerate(self.game_group_list):
@@ -293,7 +293,6 @@ def main(cfg):
                 elif last_mode in gene.mode:
                     gene.scan(img, last_mode)
                     action = []
-                    time.sleep(0.1)
                 elif last_mode in graff.mode:
                     action = graff.action(gm.mode, img)
                     time.sleep(0.1)
@@ -302,6 +301,7 @@ def main(cfg):
                 
                 # print(action)
                 adb.parse_action(action)
+                """
                 if do_test == 'u':
                     gene.scan_green_gene(img)
                 if do_test == 'i':
@@ -309,17 +309,17 @@ def main(cfg):
                 if do_test == 'o':
                     gene.scan_red_gene(img)
                 do_test = False
-                    
+                """
                 if save_img:
                     now = datetime.now()
                     date_time = now.strftime("./%H-%M-%S")
                     pil_img.save(date_time + ".png")
                     save_img = False
-                
-                
+
                 if gm.game_group == 1:
                     main_text = '\n'.join([gm.text, gene.text])
                     display = gene.display
+                    time.sleep(0.1)
                 else:
                     main_text = gm.text
                     display = Image.fromarray(np.hstack([cv2.resize(img, (534, 300)), f.display])[...,::-1])

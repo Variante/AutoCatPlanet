@@ -18,7 +18,7 @@
 		"select1": [[1, 1], [1, 3], [2, 2], [1, 5]],
 		"select2": [[1, 2], [1, 3], [2, 1], [1, 5]],
 		"select3": [[1, 1], [1, 3], [1, 4], [1, 5]], 
-		"select4": [[2, 5], [2, 4], [1, 3], [1, 2]] 
+		"select4": [[2, 3], [1, 4], [1, 5], [2, 2]] 
 	},
 	"gene": {
 		"blue_score": 2,
@@ -31,7 +31,7 @@
 	},
 	"fishing": {
 		"circle_predict": 16.5,
-		"pull_release": 30,
+		"pull_release": 20,
 		"drop_thre": 70,
 		"drop_until": 1,
 		"drop_cheap_fish": false
@@ -110,11 +110,20 @@
 			"group": 1
         },
 		{
-            "file": "geneother.png",
+            "file": "genefriend.png",
             "area": [0.3, 0.0, 0.6, 0.16],
 			"chn": 1,
             "thre": 0.8,
-            "comment": "别人的猫球信息",
+            "comment": "好友猫球信息",
+			"mode": 12,
+			"group": 1
+        },
+		{
+            "file": "genemarket.png",
+            "area": [0.3, 0.0, 0.6, 0.16],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "集市猫球信息",
 			"mode": 12,
 			"group": 1
         },
@@ -236,6 +245,33 @@
 			"group": 3
         },
 		{
+            "file": "graff4map2.png",
+            "area": [0.28, 0.5, 0.32, 0.56],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "涂鸦4图2",
+			"mode": 23,
+			"group": 5
+        },
+		{
+            "file": "graff4map1.png",
+            "area": [0.28, 0.5, 0.32, 0.56],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "涂鸦4图1",
+			"mode": 52,
+			"group": 5
+        },
+		{
+            "file": "graff4map0.png",
+            "area": [0.71, 0.5, 0.75, 0.56],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "涂鸦4图0",
+			"mode": 51,
+			"group": 5
+        },
+		{
             "file": "graffautostart.png",
             "area": [0.127, 0.632, 0.172, 0.7],
 			"chn": 1,
@@ -279,6 +315,15 @@
             "comment": "三图最终战开始",
 			"mode": 26,
 			"group": 4
+        },
+		{
+            "file": "graff4final.png",
+            "area": [0.32, 0.22, 0.97, 0.7],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "四图最终战开始",
+			"mode": 26,
+			"group": 5
         },
 		{
             "file": "graffselect.png",
