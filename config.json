@@ -161,7 +161,7 @@
             "thre": 0.8,
             "comment": "结算涂鸦",
 			"mode": 20,
-			"group": [2, 3, 4, 5]
+			"group": [2, 3, 4, 5, 6]
         },
 		{
             "file": "graff1map2.png",
@@ -341,8 +341,54 @@
             "thre": 0.8,
             "comment": "连接错误",
 			"mode": 50,
-			"group": [2, 3, 4, 5]
+			"group": [2, 3, 4, 5, 6]
+        },
+		{
+            "file": "lecturetag.png",
+            "area": [0.66, 0.21, 0.88, 0.27],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "课程词条",
+			"mode": 60,
+			"group": 6
+        },
+		{
+            "file": "lecturefinal.png",
+            "area": [0.78, 0.89, 0.96, 0.94],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "课程战斗开始",
+			"mode": 61,
+			"group": 6
+        },
+		{
+            "file": "lecturestart.png",
+            "area": [0.70, 0.77, 0.88, 0.83],
+			"chn": 1,
+            "thre": 0.95,
+            "comment": "课程开始",
+			"mode": 62,
+			"group": 6
+        },
+		{
+            "file": "lectureend.png",
+            "area": [0.55, 0.63, 0.69, 0.70],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "课程结算",
+			"mode": 63,
+			"group": 6
+        },
+		{
+            "file": "lectureinit.png",
+            "area": [0.76, 0.75, 0.81, 0.78],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "发起课程",
+			"mode": 64,
+			"group": 6
         }
+		
 		
 		
 	]

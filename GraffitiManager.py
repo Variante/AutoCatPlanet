@@ -10,7 +10,7 @@ class GraffitiManager:
         self.display = np.zeros([300, 300, 3], dtype=np.uint8)
         self.config = config["graffiti"]
         self.mode = {
-            20: (0.813, 0.853, 0.895, 0.915),
+            20: (0.813, 0.853, 0.895, 0.915), # x1, y1, x2, y2
             21: (0.70, 0.14, 0.75, 0.22),
             22: (0.70, 0.47, 0.75, 0.55),
             23: (0.45, 0.45, 0.55, 0.55),
@@ -26,6 +26,11 @@ class GraffitiManager:
             50: (0.5, 0.65, 0.9, 0.71),
             51: (0.71, 0.5, 0.75, 0.56), 
             52: (0.28, 0.5, 0.32, 0.56), 
+            60: self.lecture_tag,
+            61: (0.78, 0.89, 0.96, 0.94), # lecture launch
+            62: (0.70, 0.77, 0.88, 0.83),  # lecture start
+            63: self.lecture_end,
+            64: (0.61, 0.77, 0.81, 0.84)
             
         }
         self.tapped = False
@@ -53,6 +58,19 @@ class GraffitiManager:
             return self.tap(code)
         else:
             return code(mode, img)
+    
+    
+    def lecture_end(self, mode, img):
+        if self.tapped:
+            return []
+        self.tapped = True
+        return [("tap", (np.random.uniform(0.55, 0.69), np.random.uniform(0.63, 0.70))), ('wait', 2.0)] * 2
+    
+    def lecture_tag(self, mode, img):
+        if self.tapped:
+            return []
+        self.tapped = True
+        return [("tap", (np.random.uniform(0.66, 0.87), np.random.uniform(0.28, 0.52))), ('wait', 0.8), ("tap", (np.random.uniform(0.73, 0.80), np.random.uniform(0.86, 0.89))), ('wait', 0.8)]
         
     def auto_start_battle(self, mode, img):
         if self.tapped:

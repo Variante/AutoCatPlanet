@@ -36,7 +36,8 @@ class GameManager:
             '自动涂鸦一本',
             '自动涂鸦二本',
             '自动涂鸦三本',
-            '自动涂鸦四本'
+            '自动涂鸦四本',
+            '自动共鸣课程'
         ]
         
         for i, j in enumerate(self.game_group_list):
