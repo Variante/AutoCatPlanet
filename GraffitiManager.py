@@ -29,8 +29,9 @@ class GraffitiManager:
             60: self.lecture_tag,
             61: (0.78, 0.89, 0.96, 0.94), # lecture launch
             62: (0.70, 0.77, 0.88, 0.83),  # lecture start
-            63: self.lecture_end,
-            64: (0.61, 0.77, 0.81, 0.84)
+            63: (0.55, 0.63, 0.69, 0.7),
+            64: (0.61, 0.77, 0.81, 0.84),
+            65: (0.61, 0.77, 0.81, 0.84)
             
         }
         self.tapped = False
@@ -58,13 +59,7 @@ class GraffitiManager:
             return self.tap(code)
         else:
             return code(mode, img)
-    
-    
-    def lecture_end(self, mode, img):
-        if self.tapped:
-            return []
-        self.tapped = True
-        return [("tap", (np.random.uniform(0.55, 0.69), np.random.uniform(0.63, 0.70))), ('wait', 2.0)] * 2
+            
     
     def lecture_tag(self, mode, img):
         if self.tapped:

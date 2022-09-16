@@ -380,12 +380,21 @@
 			"group": 6
         },
 		{
+            "file": "lectureresult.png",
+            "area": [0.40, 0.17, 0.60, 0.30],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "课程奖励",
+			"mode": 64,
+			"group": 6
+        },
+		{
             "file": "lectureinit.png",
             "area": [0.76, 0.75, 0.81, 0.78],
 			"chn": 1,
             "thre": 0.8,
             "comment": "发起课程",
-			"mode": 64,
+			"mode": 65,
 			"group": 6
         }
 		
