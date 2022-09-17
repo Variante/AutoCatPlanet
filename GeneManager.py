@@ -91,17 +91,21 @@ class GeneManager:
             return 
         h, w, _ = img.shape
         if mode == 11:
+            """
             img[int(0.3 * h): int(0.533 * h), int(0.05 * w): int(0.324 * w)] = 255 # 掩盖4属性
             img[int(0.256 * h): int(0.29 * h), int(0.133 * w): int(0.09 * w)] = 0 # 掩盖生日
             img[int(0.533 * h): int(0.7 * h), int(0.06 * w): int(0.09 * w)] = 255 # 掩盖两列图标
             img[int(0.533 * h): int(0.7 * h), int(0.19 * w): int(0.23 * w)] = 255
-            to_ocr = img[int(0.256 * h): int(0.7 * h), int(0.05 * w): int(0.324 * w), 0]
+            """
+            to_ocr = img[int(0.256 * h): int(0.7 * h), int(0.045 * w): int(0.319 * w), 0]
 
         else:
+            """
             img[int(0.28 * h): int(0.32 * h), int(0.05 * w): int(0.324 * w)] = 255 # 掩盖外观基因
             img[int(0.27 * h): int(0.493 * h), int(0.06 * w): int(0.09 * w)] = 255 # 掩盖两列图标
             img[int(0.27 * h): int(0.493 * h), int(0.19 * w): int(0.23 * w)] = 255
-            to_ocr = img[int(0.228 * h): int(0.493 * h), int(0.05 * w): int(0.324 * w), 0]
+            """
+            to_ocr = img[int(0.234 * h): int(0.493 * h), int(0.05 * w): int(0.324 * w), 0]
         
         # 检测帧变化
         cmp_ocr = cv2.resize(to_ocr, (240, 400)) / 255.0
@@ -217,7 +221,7 @@ class GeneManager:
         tw = self.config['width']
         img = resize_by_width(img, tw)
         gene_img = img[-int(tw * 0.35):]
-        type_img = img[:int(tw * 0.07), :int(tw * 0.15)]
+        type_img = img[:int(tw * 0.06), :int(tw * 0.1)]
         
         height = int(tw * 0.35 / 3)
         hoffset = int(tw * 0.03)
@@ -229,17 +233,23 @@ class GeneManager:
         gene_imgs = [ gene_img[hoffset + height * i:heoffset + height * i, woffset + width * j: weoffset + width * j]  for i in range(3) for j in range(2)]
         
         
-        def _template_loc(src, dst, text_pool):
+        def _template_loc(src, dst, text_pool, thre=self.config['thre']):
             loc = cv2.matchTemplate(src, dst, cv2.TM_CCOEFF_NORMED)
             min_val,max_val,min_indx,max_indx = cv2.minMaxLoc(loc)
             if self.config['debug']:
-                print(max_val, max_indx, text)
+                print(max_val, max_indx, end='')
             if max_val == 1 and max_indx == (0, 0):
+                if self.config['debug']:
+                    print(' Invalid')
                 return None
-            if max_val < self.config['thre']:
+            if max_val < thre:
+                if self.config['debug']:
+                    print(' Too low')
                 return None
             dst_height = dst.shape[0] / len(text_pool)
             text = text_pool[int(max_indx[1] // dst_height)]
+            if self.config['debug']:
+                print(text)
             return text
             
         res_tag = []
@@ -255,7 +265,7 @@ class GeneManager:
             print('-' * 10)
             cv2.imshow('img', np.vstack(gene_imgs))
             cv2.imshow('tp', type_img)
-            cv2.imwrite('type_img.png', type_img)
+            # cv2.imwrite('type_img.png', type_img)
             cv2.waitKey(10)
         
         if res_type is None:
