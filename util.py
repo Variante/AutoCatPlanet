@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 import json
 import win32gui
-
+import cv2
 
 def load_cfg(file='./config.json'):
     with open(file, 'r', encoding="utf-8") as f:
@@ -25,6 +25,12 @@ def get_possible_window_name(name="MuMu模拟器"):
     # print('-' * 8)
     return possible_hwnd
     
+def resize_by_width(img, tw):
+    h, w = img.shape[:2]
+    if w == int(tw):
+        return img
+    th = int(h * tw / w)
+    return cv2.resize(img, (int(tw), th))
     
 def crop_image_by_pts(img, pts):
     h, w = img.shape[:2]

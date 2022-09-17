@@ -12,7 +12,7 @@ import random
 import time
 from FishingManager import *
 from GeneManager import *
-from OCRManager import *
+# from OCRManager import *
 from ADBManager import *
 from GraffitiManager import *
 from datetime import datetime
@@ -195,18 +195,18 @@ def main(cfg):
         nonlocal do_test
         
         # print(event)
-        if event.char in ' ':
+        if event.keycode == 32:
             gm.pause_game = not gm.pause_game
-        elif event.char in 'qQ':
+        elif event.keysym in 'qQ':
             root.quit()
         # 采集猫球基因用
         # elif event.char in 'uio':
         #     do_test = event.char
-        elif event.char in 'sS':
+        elif event.keysym in 'sS':
             save_img = True
-        elif event.char in 'pP':
+        elif event.keysym in 'pP':
             auto_padding = True and cfg['autopadding']
-        elif event.char in '123456789':
+        elif event.keysym in '123456789':
             gm.game_group = int(event.char) - 1
 
     def get_stick(des, win):
@@ -223,8 +223,8 @@ def main(cfg):
     
     last_mode = 0
     gm = GameManager(cfg)
-    ocr = OCRManager()
-    gene = GeneManager(cfg, ocr)
+    # ocr = OCRManager()
+    gene = GeneManager(cfg, None)
     f = FishingManager(cfg)
     adb = ADBManager(cfg)
     graff = GraffitiManager(cfg)

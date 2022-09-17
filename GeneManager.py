@@ -6,14 +6,24 @@ from PIL import Image, ImageDraw, ImageFont, ImageTk
 
 class GeneManager:
     def __init__(self, config, ocr):
-        self.config = config['gene']
-        self.ocrapp = ocr
+        self.ocrapp = ocr # 已经不用了
         
+        self.config = config['gene']
         self.data = load_cfg('./db/gene.json')
         
         print(f"基础基因{len(self.data['green'])}个")
         print(f"组合基因{len(self.data['blue'])}个")
         print(f"主题基因{len(self.data['red'])}个")
+        
+        self.temp_text = []
+        self.temp_h = int(self.config['width'] * 0.1)
+        self.templates = self.gene_template()
+        self.type_temp = resize_by_width(cv2.imread('./img/type.png')[: ,:, 0], self.config['width'] * 0.15)
+        if self.config['debug']:
+            # print(self.temp_text)
+            cv2.imshow('Template', self.templates)
+            cv2.imshow('Type', self.type_temp)
+            cv2.waitKey(1)
         
         """
         self.name_set = set()
@@ -52,6 +62,20 @@ class GeneManager:
         
         self.my_tag = None
         self.other_tag = None
+        
+    def gene_template(self):
+        templates = []
+        font = ImageFont.truetype("./db/NotoSansSC-Medium.otf", 13, encoding="unic")  # 设置字体
+        for i in list(self.data['blue'].keys()) + list(self.data['green'].keys()):
+            img_w = int(self.config['width'] * 0.5)
+            image= Image.new('L', (img_w, self.temp_h), 255)
+            draw = ImageDraw.Draw(image)
+            # draw.text()
+            w, h = draw.textsize(i, font=font)
+            draw.text(((img_w - w) // 2, 2), i, 80, font)
+            templates.append(np.array(image))
+            self.temp_text.append(i)
+        return np.vstack(templates)
         
     def save_gene(self, file='./db/gene.json'):
         with open(file, 'w', encoding="utf-8") as f:
@@ -187,18 +211,57 @@ class GeneManager:
         self.text = text
         self.display = display
         
-        
+       
     def _scan_my_cat(self, img):
         # print('检测标签')
-        tags = self.ocrapp.ocr(img)
-        if len(tags) < 1:
-            return [], []
-        if tags[0]['text'] not in self.data['type']:
-            return [], []
-        # print(tags)
-        # cv2.imshow('detect', img)
-        # cv2.waitKey(1)
-        return [tags[0]['text']], [i['text'] for i in tags[1:] if i['text'] in self.data['blue'] or i['text'] in self.data['green']]
+        tw = self.config['width']
+        img = resize_by_width(img, tw)
+        gene_img = img[-int(tw * 0.35):]
+        type_img = img[:int(tw * 0.07), :int(tw * 0.15)]
+        
+        height = int(tw * 0.35 / 3)
+        hoffset = int(tw * 0.03)
+        heoffset = int(tw * 0.09)
+        width = int(tw * 0.5)
+        woffset = int(tw * 0.15)
+        weoffset = int(tw * 0.48)
+        
+        gene_imgs = [ gene_img[hoffset + height * i:heoffset + height * i, woffset + width * j: weoffset + width * j]  for i in range(3) for j in range(2)]
+        
+        
+        def _template_loc(src, dst, text_pool):
+            loc = cv2.matchTemplate(src, dst, cv2.TM_CCOEFF_NORMED)
+            min_val,max_val,min_indx,max_indx = cv2.minMaxLoc(loc)
+            if self.config['debug']:
+                print(max_val, max_indx, text)
+            if max_val == 1 and max_indx == (0, 0):
+                return None
+            if max_val < self.config['thre']:
+                return None
+            dst_height = dst.shape[0] / len(text_pool)
+            text = text_pool[int(max_indx[1] // dst_height)]
+            return text
+            
+        res_tag = []
+        for i in gene_imgs:
+            res = _template_loc(i, self.templates, self.temp_text)
+            if res is not None:
+                res_tag.append(res)
+        
+        res_type = _template_loc(type_img, self.type_temp, self.data['type'])
+        
+        
+        if self.config['debug']:
+            print('-' * 10)
+            cv2.imshow('img', np.vstack(gene_imgs))
+            cv2.imshow('tp', type_img)
+            cv2.imwrite('type_img.png', type_img)
+            cv2.waitKey(10)
+        
+        if res_type is None:
+            return [], res_tag
+        return [res_type], res_tag
+
         
     
     def predict_gene(self):
@@ -334,7 +397,7 @@ class GeneManager:
         return score, need_text
                     
                 
-        
+"""       
     def _scan_left(self, img):
         h, w, _ = img.shape
         to_ocr = img[int(0.186 * h): int(0.882 * h), int(0.08 * w): int(0.185 * w), 0]
@@ -410,7 +473,7 @@ class GeneManager:
             'type': tpstr,
             'pre': pre
         }
-
+"""
 
 if __name__ == '__main__':
     cfg = load_cfg()

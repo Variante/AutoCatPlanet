@@ -13,10 +13,8 @@
 ```
 git clone https://github.com/Variante/AutoCatPlanet
 cd AutoCatPlanet
-pip install mss pillow scipy numpy opencv-python pywin32 adb-shell cnocr
+pip install mss pillow scipy numpy opencv-python pywin32 adb-shell
 ```
-
-猫球查询依赖[CnORC](https://github.com/breezedeus/cnocr)
 
 ## 使用前准备
 根据模拟器渲染分辨率调整config.json文件中的adb_shape等其它各类参数，

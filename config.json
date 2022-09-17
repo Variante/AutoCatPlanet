@@ -22,6 +22,9 @@
 		"select4": [[2, 3], [1, 4], [1, 5], [2, 2]] 
 	},
 	"gene": {
+		"debug": false,
+		"thre": 0.7,
+		"width": 255,
 		"blue_score": 2,
 		"green_score": 1,
 		"type_score": 1,
