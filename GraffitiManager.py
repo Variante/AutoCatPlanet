@@ -91,11 +91,11 @@ class GraffitiManager:
         res = []
         # select new
         
-        """
-        # debug
-        imgc = img.astype(np.uint8).copy()         
-        srcs = []
-        """
+        if self.config['debug']:
+            # debug
+            imgc = img.astype(np.uint8).copy()         
+            srcs = []
+
         
         for row, col in self.config[f'select{mode % 10}']:
             row -= 1
@@ -112,12 +112,12 @@ class GraffitiManager:
             tap_pos = (np.random.uniform(max_indx[0] + src.shape[1] / 2, max_indx[0] + src.shape[0] / 2 + 50) / img.shape[1],
             np.random.uniform(max_indx[1] + src.shape[0] / 2, max_indx[1] + src.shape[1] / 2 + 10) / img.shape[0])
             
-            """
-            # debug
-            srcs.append(src)
-            imgc = cv2.circle(imgc, max_indx, 10, (0, 0, 255, 0), 2)
-            imgc = cv2.circle(imgc, (int(tap_pos[0] * imgc.shape[1]), int(tap_pos[1] * imgc.shape[0])), 10, (0, 255, 0, 0), 2)
-            """
+            if self.config['debug']:
+                # debug
+                srcs.append(src)
+                imgc = cv2.circle(imgc, max_indx, 10, (0, 0, 255, 0), 2)
+                imgc = cv2.circle(imgc, (int(tap_pos[0] * imgc.shape[1]), int(tap_pos[1] * imgc.shape[0])), 10, (0, 255, 0, 0), 2)
+                print('Max_val: ', max_val)
             
             res.append(("tap", tap_pos))
             res.append(('wait', np.random.uniform(0.5, 1)))
@@ -127,12 +127,12 @@ class GraffitiManager:
         res.append(('wait', np.random.uniform(1, 2)))
         self.tapped = True
         
-        """
-        # debug
-        cv2.imshow('src', np.hstack(srcs))
-        cv2.imshow('tgt', imgc)
-        cv2.waitKey(0)
-        """
+        if self.config['debug']:
+            # debug
+            cv2.imshow('src', np.hstack(srcs))
+            cv2.imshow('tgt', imgc)
+            cv2.waitKey(0)
+            return []
         
         return res
         
