@@ -2,7 +2,7 @@ from util import *
 import numpy as np
 import cv2
 import random
-import scipy.stats
+# import scipy.stats
 
 # 钓鱼用
 class FishingManager:
@@ -150,7 +150,7 @@ class FishingManager:
                 # print("检测不到环带")
                 return 0, 1
                 # results_dist, proportiontocut=0.25, axis=None)
-            return int(scipy.stats.trim_mean(np.argmax(patch, axis=1), proportiontocut=0.25)) + start_idx, int(patch.shape[1] - 1 - scipy.stats.trim_mean(np.argmax(patch[:, ::-1], axis=1), proportiontocut=0.25)) + start_idx
+            return int(np.mean(np.argmax(patch, axis=1)) + start_idx), int(patch.shape[1] - 1 - np.mean(np.argmax(patch[:, ::-1], axis=1)) + start_idx)
         
         enable = True
         if (self.band_idx[1] - self.band_idx[0]) > 20 or (self.band_idx[1] - self.band_idx[0]) < 10 :
