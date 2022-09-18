@@ -19,10 +19,14 @@ class GraffitiManager:
             26: (0.85, 0.9, 0.9, 0.95),
             27: (0.706, 0.660, 0.744, 0.744),
             28: (0.28, 0.70, 0.30, 0.77),
-            31: self.new_selection,
-            32: self.new_selection,
-            33: self.new_selection,
-            34: self.new_selection,
+            31: self.query_selection,
+            32: self.query_selection,
+            33: self.query_selection,
+            34: self.query_selection,
+            41: self.script_selection,
+            42: self.script_selection,
+            43: self.script_selection,
+            44: self.script_selection,
             50: (0.5, 0.65, 0.9, 0.71),
             51: (0.71, 0.5, 0.75, 0.56), 
             52: (0.28, 0.5, 0.32, 0.56), 
@@ -37,7 +41,12 @@ class GraffitiManager:
         self.tapped = False
         self.counter = 0
         self.src = cv2.imread('./img/graffselect.png')[:, :, 1]
-        
+        self.img_pool = [
+            crop_image_by_pts(resize_by_width(cv2.imread(f'./img/graff{i + 1}final.png')[:, :, 1],
+            self.config['width'] * 15),
+            (0.32, 0.27, 0.99, 0.47)) 
+            for i in range(4)
+        ]
     def clear(self):
         self.tapped = False
         self.counter = 0
@@ -84,8 +93,8 @@ class GraffitiManager:
             res.append(('wait', np.random.uniform(0.5, 1)))
         self.tapped = True
         return res
-            
-    def new_selection(self, mode, img):  
+       
+    def script_selection(self, mode, img):  
         if self.tapped:
             return []
         res = []
@@ -136,4 +145,75 @@ class GraffitiManager:
         
         return res
         
- 
+    def query_selection(self, mode, img):  
+        if self.tapped:
+            return []
+        res = []
+        # select new
+        tgt = self.img_pool[mode % 10 - 1]
+        
+        if self.config['debug']:
+            # debug
+            imgc = tgt.astype(np.uint8).copy()         
+            srcs = []
+            res_pos = [0] * 4
+
+        res_val = [0] * 4
+        res_loc = [0] * 4
+        
+        for i in range(15):
+            col = i % 5
+            row = i // 5
+            
+            tap_pos = (0.375 + 0.13375 * col, 0.27 + 0.27 * row, 0.45 +  0.13375 * col,  0.34 + 0.27 * row)
+            src = crop_image_by_pts(img[:,:,1], tap_pos)
+            src = resize_by_width(src, self.config['width']) # 头像小窗口
+            
+            
+            # print(src.shape)
+            loc = cv2.matchTemplate(src, tgt, cv2.TM_CCOEFF_NORMED)
+            min_val,max_val,min_indx,max_indx = cv2.minMaxLoc(loc)
+            
+            if self.config['debug']:
+                # debug
+                srcs.append(src)
+                imgc = cv2.circle(imgc, max_indx, 7, 0, 4)
+                # imgc = cv2.circle(imgc, (int(tap_pos[0] * imgc.shape[1]), int(tap_pos[1] * imgc.shape[0])), 10, (0, 255, 0, 0), 2)
+                print(i, 'Max_val: ', max_val, max_indx)
+            
+            if max_val > self.config["thre"]:
+                idx = int(max_indx[0] * 4 // tgt.shape[1])
+                if max_val > res_val[idx]:
+                    res_val[idx] = max_val
+                    res_loc[idx] = tap_pos
+                    if self.config['debug']:
+                        imgc = cv2.circle(imgc, max_indx, 4, 255, 5)
+                        res_pos[idx] = (row, col)
+                        print(res_pos)
+                        
+        
+        # final location
+        for i in res_loc:
+            if isinstance(i, int):
+                print("没能找到所有武装，请检查")
+                return [('wait', 1)]
+            res.append(("tap", (np.random.uniform(i[0], i[2]), np.random.uniform(i[1], i[3]))))
+            res.append(('wait', np.random.uniform(0.5, 1)))
+            
+        # confirm
+        res.append(('tap', (np.random.uniform(0.85, 0.96), np.random.uniform(0.9, 0.96))))
+        res.append(('wait', np.random.uniform(1, 2)))
+        self.tapped = True
+        
+        if self.config['debug']:
+            print(res_pos)
+            print(res_loc)
+            print(res)
+            # debug
+            cv2.imshow('src', np.vstack(srcs))
+            cv2.imshow('tgt', imgc)
+            cv2.waitKey(0)
+            
+            return []
+        
+        return res

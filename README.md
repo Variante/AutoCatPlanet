@@ -22,7 +22,7 @@ pip install mss pillow scipy numpy opencv-python pywin32 adb-shell
 ```
 "name": "MuMu模拟器",      # 更改为需要的窗口名称
 "padding": [36, 53, 0, 0], # 切除上、下、左、右的黑边，需要调整这4个值使得只有游戏画面被精准捕捉，过多过少都不行。
-"autopadding": true,       # 现已支持自动检测padding，在一个明亮的画面下按P即可检测，建议得到结果后修改config
+"autopadding": true,       # 现已支持自动检测padding，将模拟器放置在窗口最前，在显示一个明亮的画面下按P即可检测，建议得到结果后修改config
 "autopadding_thre": 40,
 "adb_shape": [2560, 1440], # 更改为模拟器渲染的分辨率（设置中能看到，不是实际窗口大小）
 "adb_device": "/dev/input/event8", # 更改为你模拟器的输入设备，如果不知道输入设备是哪个，使用adb shell getevent后查看
@@ -89,8 +89,28 @@ Q:退出
 },
 ```
 
-### 自动刷涂鸦
-首先替换img中的graff1final.png为你的最终阵容（2-4图替换graff[2-4]final.png），随后修改在config中的这个部分来选择你的阵容。
+### 自动刷涂鸦（新版阵容选择）
+替换img中的graff1final.png为你的最终阵容（2-4图替换graff[2-4]final.png）即可，如果出现检测不到武装的情况请跳转到旧版。
+目前的逻辑是两场小战斗后进行boss战，不更改猫球buff，不使用料理。
+
+
+### 自动刷涂鸦（旧版阵容选择）
+使用旧版需要进行以下修改：
+1. 修改config中这个部分，把mode从31-34改为41-44
+```
+{
+            "file": "graffselect.png",
+            "area": [0.68, 0.9, 0.98, 0.98],
+			"chn": 1,
+            "thre": 0.8,
+            "comment": "武装选择",
+			"mode": [41, 42, 43, 44],
+			"group": [2, 3, 4, 5]
+        },
+```
+2. 替换img中的graff1final.png为你的最终阵容（2-4图替换graff[2-4]final.png）
+3. 修改graffselect.png为你的阵容（注意截图时不要选择任何武装）
+4. 修改在config中的这个部分来选择你的阵容。
 
 ```
 "graffiti": {
@@ -100,7 +120,7 @@ Q:退出
 		"select4": [[2, 5], [2, 4], [1, 3], [1, 2]] 
 	},
 ```
-目前的逻辑是两场小战斗后进行boss战，不更改猫球buff，不使用料理。
+
 
 ### 自动共鸣课程
 使用的是和自动涂鸦一样的框架，逻辑是无脑最高难度词条，不修改阵容。
