@@ -254,6 +254,8 @@ class GeneManager:
             
         res_tag = []
         for i in gene_imgs:
+            if np.mean(i) > 250: # 出现空白，后面没有基因了
+                break
             res = _template_loc(i, self.templates, self.temp_text)
             if res is not None:
                 res_tag.append(res)

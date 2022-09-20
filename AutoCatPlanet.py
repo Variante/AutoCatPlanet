@@ -231,12 +231,17 @@ def main(cfg):
     
     root.bind('<KeyPress>', onKeyPress)
     
+    ui_refresh = False
+    last_action = []
+    
     with mss.mss() as m:
         def capture_stream():
             nonlocal save_img
             nonlocal last_mode
             nonlocal auto_padding
             nonlocal do_test
+            nonlocal ui_refresh
+            nonlocal last_action
 
             win_info = get_window_roi(target_name, [0, 0, 1, 1], [0] * 4 if auto_padding else cfg['padding'])
             if win_info['left'] < 0 and win_info['top'] < 0:
@@ -288,18 +293,22 @@ def main(cfg):
                     graff.clear()
                     adb.release_all_keys()
                 last_mode = gm.mode
+                
                 # check with Fishing manager
+                action = []
                 if last_mode in f.mode:
                     action = f.mode[gm.mode](img, img_time)
                 elif last_mode in gene.mode:
                     gene.scan(img, last_mode)
-                    action = []
                 elif last_mode in graff.mode:
-                    action = graff.action(gm.mode, img)
-                    time.sleep(0.1)
-                else:
-                    action = []
-                
+                    if ui_refresh:
+                        action = last_action.copy()
+                        last_action = []
+                        ui_refresh = False
+                    else:
+                        last_action = graff.action(gm.mode, img)
+                        if len(last_action):
+                            ui_refresh = True
                 # print(action)
                 adb.parse_action(action)
                 """
@@ -321,6 +330,9 @@ def main(cfg):
                     main_text = '\n'.join([gm.text, gene.text])
                     display = gene.display
                     time.sleep(0.1)
+                elif gm.game_group in [2, 3, 4, 5]:
+                    main_text = gm.text
+                    display = Image.fromarray(np.hstack([cv2.resize(img, (534, 300)), graff.display])[...,::-1])
                 else:
                     main_text = gm.text
                     display = Image.fromarray(np.hstack([cv2.resize(img, (534, 300)), f.display])[...,::-1])

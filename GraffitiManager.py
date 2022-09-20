@@ -47,18 +47,21 @@ class GraffitiManager:
             (0.32, 0.27, 0.99, 0.47)) 
             for i in range(4)
         ]
+        self.font = cv2.FONT_HERSHEY_SIMPLEX
+        
+        
     def clear(self):
         self.tapped = False
         self.counter = 0
         
     def tap(self, c):
-        if self.tapped and self.counter < 30:
+        if self.tapped and self.counter < 10:
             self.counter += 1
             return []
         self.tapped = True
         self.counter = 0
         x, y = np.random.uniform(c[0], c[2]), np.random.uniform(c[1], c[3])
-        return [("wait", 0.5), ("tap", (x, y)), ("wait", 1)]
+        return [("tap", (x, y)), ("wait", 1)]
 
 
     def action(self, mode, img):
@@ -100,9 +103,9 @@ class GraffitiManager:
         res = []
         # select new
         
+        imgc = img.astype(np.uint8).copy()  
         if self.config['debug']:
             # debug
-            imgc = img.astype(np.uint8).copy()         
             srcs = []
 
         
@@ -121,11 +124,12 @@ class GraffitiManager:
             tap_pos = (np.random.uniform(max_indx[0] + src.shape[1] / 2, max_indx[0] + src.shape[0] / 2 + 50) / img.shape[1],
             np.random.uniform(max_indx[1] + src.shape[0] / 2, max_indx[1] + src.shape[1] / 2 + 10) / img.shape[0])
             
+            imgc = cv2.circle(imgc, max_indx, 10, (0, 0, 255, 0), 2)
+            imgc = cv2.circle(imgc, (int(tap_pos[0] * imgc.shape[1]), int(tap_pos[1] * imgc.shape[0])), 10, (0, 255, 0, 0), 2)
+            
             if self.config['debug']:
                 # debug
                 srcs.append(src)
-                imgc = cv2.circle(imgc, max_indx, 10, (0, 0, 255, 0), 2)
-                imgc = cv2.circle(imgc, (int(tap_pos[0] * imgc.shape[1]), int(tap_pos[1] * imgc.shape[0])), 10, (0, 255, 0, 0), 2)
                 print('Max_val: ', max_val)
             
             res.append(("tap", tap_pos))
@@ -152,14 +156,21 @@ class GraffitiManager:
         # select new
         tgt = self.img_pool[mode % 10 - 1]
         
+        imgc = tgt.astype(np.uint8).copy()  
         if self.config['debug']:
             # debug
-            imgc = tgt.astype(np.uint8).copy()         
             srcs = []
             res_pos = [0] * 4
 
         res_val = [0] * 4
         res_loc = [0] * 4
+        
+        
+        # UI
+        height = int(self.display.shape[0] * 0.7)
+        chp = cv2.resize(crop_image_by_pts(img[:,:,1], (0.33, 0.2, 1, 1)), (self.display.shape[1], height))
+        for i in range(3):
+            self.display[:height, :, i] = chp
         
         for i in range(15):
             col = i % 5
@@ -169,15 +180,17 @@ class GraffitiManager:
             src = crop_image_by_pts(img[:,:,1], tap_pos)
             src = resize_by_width(src, self.config['width']) # 头像小窗口
             
-            
             # print(src.shape)
             loc = cv2.matchTemplate(src, tgt, cv2.TM_CCOEFF_NORMED)
             min_val,max_val,min_indx,max_indx = cv2.minMaxLoc(loc)
+
+            # UI
+            self.display = cv2.putText(self.display, f"{max_val:.3f}"[1:], (col * 60 + 10, row * 70 + 30), self.font, 0.6, (0, 0, 255), 1)
+            imgc = cv2.circle(imgc, max_indx, 7, 0, 4)
             
             if self.config['debug']:
                 # debug
                 srcs.append(src)
-                imgc = cv2.circle(imgc, max_indx, 7, 0, 4)
                 # imgc = cv2.circle(imgc, (int(tap_pos[0] * imgc.shape[1]), int(tap_pos[1] * imgc.shape[0])), 10, (0, 255, 0, 0), 2)
                 print(i, 'Max_val: ', max_val, max_indx)
             
@@ -186,16 +199,17 @@ class GraffitiManager:
                 if max_val > res_val[idx]:
                     res_val[idx] = max_val
                     res_loc[idx] = tap_pos
+                    self.display = cv2.putText(self.display, f"{max_val:.3f}"[1:], (col * 60 + 10, row * 70 + 30), self.font, 0.6, (0, 255, 0), 2)
+                    imgc = cv2.circle(imgc, max_indx, 4, 255, 5)
                     if self.config['debug']:
-                        imgc = cv2.circle(imgc, max_indx, 4, 255, 5)
                         res_pos[idx] = (row, col)
                         print(res_pos)
                         
         
         # final location
-        for i in res_loc:
+        for j, i in enumerate(res_loc):
             if isinstance(i, int):
-                print("没能找到所有武装，请检查")
+                print(f"没能找到所有武装，请检查{j + 1}号位")
                 return [('wait', 1)]
             res.append(("tap", (np.random.uniform(i[0], i[2]), np.random.uniform(i[1], i[3]))))
             res.append(('wait', np.random.uniform(0.5, 1)))
@@ -204,6 +218,11 @@ class GraffitiManager:
         res.append(('tap', (np.random.uniform(0.85, 0.96), np.random.uniform(0.9, 0.96))))
         res.append(('wait', np.random.uniform(1, 2)))
         self.tapped = True
+        
+        # UI
+        chp = cv2.resize(imgc, (self.display.shape[1], self.display.shape[0] - height))
+        for i in range(3):
+            self.display[height:,:,i] = chp
         
         if self.config['debug']:
             print(res_pos)
