@@ -327,7 +327,7 @@ def main(cfg):
                     main_text = '\n'.join([gm.text, gene.text])
                     display = gene.display
                     time.sleep(0.1)
-                elif gm.game_group in [2, 3, 4, 5]:
+                elif gm.game_group in [2, 3]:
                     main_text = gm.text
                     display = Image.fromarray(np.hstack([cv2.resize(img, (534, 300)), graff.display])[...,::-1])
                 else:
