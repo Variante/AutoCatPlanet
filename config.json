@@ -158,187 +158,25 @@
             "thre": 0.8,
             "comment": "开始涂鸦",
 			"mode": 20,
-			"group": [2, 3, 4, 5]
+			"group": 2
         },
 		{
             "file": "graffexit.png",
             "area": [0.813, 0.853, 0.895, 0.915],
 			"chn": 1,
             "thre": 0.8,
-            "comment": "结算涂鸦",
+            "comment": "结算",
 			"mode": 20,
-			"group": [2, 3, 4, 5, 6]
-        },
-		{
-            "file": "graff1map2.png",
-            "area": [0.70, 0.14, 0.75, 0.55],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "涂鸦1图2",
-			"mode": 23,
-			"group": 2
-        },
-		{
-            "file": "graff1map1.png",
-            "area": [0.70, 0.47, 0.75, 0.55],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "涂鸦1图1",
-			"mode": 22,
-			"group": 2
-        },
-		{
-            "file": "graff1map0.png",
-            "area": [0.70, 0.14, 0.75, 0.22],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "涂鸦1图0",
-			"mode": 21,
-			"group": 2
-        },
-		{
-            "file": "graff3map2.png",
-            "area": [0.273, 0.70, 0.312, 0.78],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "涂鸦3图2",
-			"mode": 23,
-			"group": 4
-        },
-		{
-            "file": "graff3map1.png",
-            "area": [0.273, 0.70, 0.312, 0.78],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "涂鸦3图1",
-			"mode": 28,
-			"group": 4
-        },
-		{
-            "file": "graff3map0.png",
-            "area": [0.706, 0.660, 0.744, 0.744],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "涂鸦3图0",
-			"mode": 27,
-			"group": 4
-        },
-		{
-            "file": "graff2map2.png",
-            "area": [0.273, 0.70, 0.312, 0.78],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "涂鸦2图2",
-			"mode": 23,
-			"group": 3
-        },
-		{
-            "file": "graff3map1.png",
-            "area": [0.273, 0.70, 0.312, 0.78],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "涂鸦2图1",
-			"mode": 28,
-			"group": 3
-        },
-		{
-            "file": "graff3map0.png",
-            "area": [0.706, 0.660, 0.744, 0.744],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "涂鸦2图0",
-			"mode": 27,
-			"group": 3
-        },
-		{
-            "file": "graff4map2.png",
-            "area": [0.28, 0.5, 0.32, 0.56],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "涂鸦4图2",
-			"mode": 23,
-			"group": 5
-        },
-		{
-            "file": "graff4map1.png",
-            "area": [0.28, 0.5, 0.32, 0.56],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "涂鸦4图1",
-			"mode": 52,
-			"group": 5
-        },
-		{
-            "file": "graff4map0.png",
-            "area": [0.71, 0.5, 0.75, 0.56],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "涂鸦4图0",
-			"mode": 51,
-			"group": 5
+			"group": [2, 3]
         },
 		{
             "file": "graffautostart.png",
-            "area": [0.127, 0.632, 0.172, 0.7],
+            "area": [0.78, 0.89, 0.96, 0.94],
 			"chn": 1,
             "thre": 0.8,
-            "comment": "一键配置后开始",
-			"mode": 24,
-			"group": [2, 3, 4, 5]
-        },
-		{
-            "file": "graff1final.png",
-            "area": [0.02, 0.63, 0.10, 0.79],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "最终战准备",
-			"mode": 25,
-			"group": [2, 3, 4, 5]
-        },
-		{
-            "file": "graff1final.png",
-            "area": [0.32, 0.22, 0.97, 0.7],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "一图最终战开始",
-			"mode": 26,
-			"group": 2
-        },
-		{
-            "file": "graff2final.png",
-            "area": [0.32, 0.22, 0.97, 0.7],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "二图最终战开始",
-			"mode": 26,
-			"group": 3
-        },
-		{
-            "file": "graff3final.png",
-            "area": [0.32, 0.22, 0.97, 0.7],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "三图最终战开始",
-			"mode": 26,
-			"group": 4
-        },
-		{
-            "file": "graff4final.png",
-            "area": [0.32, 0.22, 0.97, 0.7],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "四图最终战开始",
-			"mode": 26,
-			"group": 5
-        },
-		{
-            "file": "graffselect.png",
-            "area": [0.68, 0.9, 0.98, 0.98],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "武装选择",
-			"mode": [31, 32, 33, 34],
-			"group": [2, 3, 4, 5]
+            "comment": "战斗开始",
+			"mode": 61,
+			"group": [2, 3]
         },
 		{
             "file": "connectionerror.png",
@@ -347,7 +185,7 @@
             "thre": 0.8,
             "comment": "连接错误",
 			"mode": 50,
-			"group": [2, 3, 4, 5, 6]
+			"group": [2, 3]
         },
 		{
             "file": "lecturetag.png",
@@ -356,16 +194,7 @@
             "thre": 0.8,
             "comment": "课程词条",
 			"mode": 60,
-			"group": 6
-        },
-		{
-            "file": "lecturefinal.png",
-            "area": [0.78, 0.89, 0.96, 0.94],
-			"chn": 1,
-            "thre": 0.8,
-            "comment": "课程战斗开始",
-			"mode": 61,
-			"group": 6
+			"group": 3
         },
 		{
             "file": "lecturestart.png",
@@ -374,7 +203,7 @@
             "thre": 0.95,
             "comment": "课程开始",
 			"mode": 62,
-			"group": 6
+			"group": 3
         },
 		{
             "file": "lectureend.png",
@@ -383,7 +212,7 @@
             "thre": 0.8,
             "comment": "课程结算",
 			"mode": 63,
-			"group": 6
+			"group": 3
         },
 		{
             "file": "lectureresult.png",
@@ -392,7 +221,7 @@
             "thre": 0.8,
             "comment": "课程奖励",
 			"mode": 64,
-			"group": 6
+			"group": 3
         },
 		{
             "file": "lectureinit.png",
@@ -401,7 +230,7 @@
             "thre": 0.8,
             "comment": "发起课程",
 			"mode": 65,
-			"group": 6
+			"group": 3
         }
 		
 		
