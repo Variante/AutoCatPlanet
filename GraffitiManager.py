@@ -40,6 +40,7 @@ class GraffitiManager:
         }
         self.tapped = False
         self.counter = 0
+        """
         self.src = cv2.imread('./img/graffselect.png')[:, :, 1]
         self.img_pool = [
             crop_image_by_pts(resize_by_width(cv2.imread(f'./img/graff{i + 1}final.png')[:, :, 1],
@@ -47,6 +48,7 @@ class GraffitiManager:
             (0.32, 0.27, 0.99, 0.47)) 
             for i in range(4)
         ]
+        """
         self.font = cv2.FONT_HERSHEY_SIMPLEX
         
         
